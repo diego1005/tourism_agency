@@ -39,6 +39,22 @@ module.exports = (sequelize, DataTypes) => {
                         as: "fees",
                         foreignKey: "idFee"
                     }
+                ),
+            individualContract.belongsTo
+                (
+                    models.StateContract,
+                    {
+                        as: "stateContract",
+                        foreignKey: "idStateContract"
+                    }
+                ),
+            individualContract.belongsTo
+                (
+                    models.GeneralContract,
+                    {
+                        as: "generalContract",
+                        foreignKey: "idGeneralContract"
+                    }
                 )
     }
 

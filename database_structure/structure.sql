@@ -55,14 +55,17 @@ CREATE TABLE general_contracts (
     travel_date DATE NOT NULL,
     idTravelDestination INT NOT NULL,
     idStateContract INT NOT NULL,
+    idIndividualContract INT NOT NULL,
     idResponsible_generalContracts INT NOT NULL,
     FOREIGN KEY idTravelDestination REFERENCES travel_destination(id),
     FOREIGN KEY idStateContract REFERENCES state_contracts(id),
-    FOREIGN KEY idResponsible_generalContracts REFERENCES responsible_generalContracts(id)
+    FOREIGN KEY idIndividualContract REFERENCES individual_contracts(id),
+    FOREIGN KEY idResponsible_generalContracts REFERENCES responsible_generalContracts(id),
 );
 
 CREATE TABLE travel_destination (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(45) NOT NULL,
     description TEXT NOT NULL
 );
 
@@ -77,5 +80,7 @@ CREATE TABLE responsible_senior (
     dni VARCHAR(11) NOT NULL,
     name VARCHAR(45) NOT NULL,
     lastname VARCHAR(45) NOT NULL,
-    birth_date DATE NOT NULL
+    birth_date DATE NOT NULL,
+    idResponsible_generalContracts INT NOT NULL,
+    FOREIGN KEY idResponsible_generalContracts REFERENCES responsible_generalContracts(id)
 );
