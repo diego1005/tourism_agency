@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const responsible_senior = sequelize.define(
+    const responsibleSenior = sequelize.define(
         "ResponsibleSenior", //alias
         {   //table structure
             dni: DataTypes.STRING(11),
@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
             birth_date: DataTypes.DATE,
         },
         {   //configs
-            tablename: "responsible_seniors",
+            tablename: "responsiblSeniors",
             Timestamps: true,
             createdAt: "created_at",
             updatedAt: "updated_at",
@@ -16,8 +16,8 @@ module.exports = (sequelize, DataTypes) => {
         },
     )
 
-    responsible_senior.associate = (models) => {
-        responsible_senior.belongsToMany
+    responsibleSenior.associate = (models) => {
+        responsibleSenior.belongsToMany
             (
                 models.GeneralContract,
                 {
@@ -27,5 +27,5 @@ module.exports = (sequelize, DataTypes) => {
             )
     }
 
-    return responsible_senior;
+    return responsibleSenior;
 }

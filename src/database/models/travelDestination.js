@@ -1,12 +1,12 @@
 module.exports = (sequelize, DataTypes) => {
-    const travel_destination = sequelize.define(
-        "Travel_destination", //alias
+    const travelDestination = sequelize.define(
+        "TravelDestination", //alias
         {   //table structure
             name: DataTypes.STRING(45),
             description: DataTypes.TEXT,
         },
         {   //configs
-            tablename: "travel_destinations",
+            tablename: "travelDestinations",
             Timestamps: true,
             createdAt: "created_at",
             updatedAt: "updated_at",
@@ -14,8 +14,8 @@ module.exports = (sequelize, DataTypes) => {
         },
     )
 
-    travel_destination.associate = (models) => {
-        travel_destination.hasMany
+    travelDestination.associate = (models) => {
+        travelDestination.hasMany
         (
             models.GeneralContract,
             {
@@ -25,5 +25,5 @@ module.exports = (sequelize, DataTypes) => {
         )
     }
 
-    return travel_destination;
+    return travelDestination;
 }

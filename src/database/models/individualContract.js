@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
             indicated_value: DataTypes.DECIMAL(8, 2),
         },
         {   //configs
-            tablename: "individual_contracts",
+            tablename: "individualContracts",
             Timestamps: true,
             createdAt: "created_at",
             updatedAt: "updated_at",

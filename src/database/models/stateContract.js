@@ -1,11 +1,11 @@
 module.exports = (sequelize, DataTypes) => {
-    const state_contract = sequelize.define(
+    const stateContract = sequelize.define(
         "StateContract", //alias
         {   //table structure
             description: DataTypes.TEXT,
         },
         {   //configs
-            tablename: "state_contracts",
+            tablename: "stateContracts",
             Timestamps: true,
             createdAt: "created_at",
             updatedAt: "updated_at",
@@ -13,8 +13,8 @@ module.exports = (sequelize, DataTypes) => {
         },
     )
 
-    state_contract.associate = (models) => {
-        state_contract.belongsTo
+    stateContract.associate = (models) => {
+        stateContract.belongsTo
         (
             models.IndividualContract,
             {
@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: "idStateContract"
             }
         ),
-        state_contract.belongsTo
+        stateContract.belongsTo
         (
             models.GeneralContract,
             {
@@ -32,5 +32,5 @@ module.exports = (sequelize, DataTypes) => {
         )
     }
 
-    return state_contract;
+    return stateContract;
 }

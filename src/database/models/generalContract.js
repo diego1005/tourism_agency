@@ -2,10 +2,13 @@ module.exports = (sequelize, DataTypes) => {
     const generalContract = sequelize.define(
         "GeneralContract", //alias
         {   //table structure
-
+            nro_contract: DataTypes.INTEGER,
+            indicated_date: DataTypes.DATE,
+            indicated_value: DataTypes.DECIMAL(11, 2),
+            travel_date: DataTypes.DATE,
         },
         {   //configs
-            tablename: "general_contracts",
+            tablename: "generalContracts",
             Timestamps: true,
             createdAt: "created_at",
             updatedAt: "updated_at",
