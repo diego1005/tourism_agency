@@ -21,11 +21,14 @@ const validates = {
                 return true;
             }
         }),
+        //TODO: FOR APPLY EVENTLY
+        /*
         check("url_img").custom((el, { req }) => {
             const ext = [".jpg", ".png", "jpeg", ".webp"];
             const extFile = path.extname(req.file.originalname);
             return (ext.includes(extFile));
         }).withMessage('This field requires the following extensions .jpg, .png, .jpeg, .webp')
+        */
     ],
     //Edit validations
     //For common data

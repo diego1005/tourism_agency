@@ -2,10 +2,26 @@ module.exports = (sequelize, DataTypes) => {
     const student = sequelize.define(
         "Student", //alias
         {   //table structure
-            dni: DataTypes.STRING(11),
-            name: DataTypes.STRING(45),
-            lastname: DataTypes.STRING(45),
-            birth_date: DataTypes.DATE,
+            dni: {
+                type: DataTypes.STRING(11),
+                allowNull: false,
+            },
+            name: {
+                type: DataTypes.STRING(45),
+                allowNull: false,
+            },
+            lastname: {
+                type: DataTypes.STRING(45),
+                allowNull: false,
+            },
+            birth_date: {
+                type: DataTypes.DATE,
+                allowNull: false,
+            },
+            phone: {
+                type: DataTypes.STRING(12),
+                allowNull: false,
+            }
         },
         {   //configs
             tablename: "students",
@@ -21,8 +37,8 @@ module.exports = (sequelize, DataTypes) => {
             (
                 models.IndividualContract,
                 {
-                    as: "individualContract",  //relation name
-                    foreignKey: "idStudent"
+                    as: "individual_contract",  //relation name
+                    foreignKey: "id_student"
                 }
             )
     }

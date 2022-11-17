@@ -2,13 +2,25 @@ module.exports = (sequelize, DataTypes) => {
     const generalContract = sequelize.define(
         "GeneralContract", //alias
         {   //table structure
-            nro_contract: DataTypes.INTEGER,
-            indicated_date: DataTypes.DATE,
-            indicated_value: DataTypes.DECIMAL(11, 2),
-            travel_date: DataTypes.DATE,
+            nro_contract: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+            },
+            indicated_date: {
+                type: DataTypes.DATE,
+                allowNull: false,
+            },
+            indicated_value: {
+                type: DataTypes.DECIMAL(11, 2),
+                allowNull: false,
+            },
+            travel_date: {
+                type: DataTypes.DATE,
+                allowNull: false,
+            }
         },
         {   //configs
-            tablename: "generalContracts",
+            tablename: "general_contracts",
             Timestamps: true,
             createdAt: "created_at",
             updatedAt: "updated_at",
@@ -21,32 +33,32 @@ module.exports = (sequelize, DataTypes) => {
             (
                 models.TravelDestination,
                 {
-                    as: "travelDestination",  //relationship name
-                    foreignKey: "idTravelDestination"
+                    as: "travel_destination",  //relationship name
+                    foreignKey: "id_travel_destination"
                 }
             ),
             generalContract.belongsTo
                 (
-                    models.StateContract,
+                    models.StateGeneralContract,
                     {
-                        as: "stateContract",
-                        foreignKey: "idStateContract"
+                        as: "state_general_contract",
+                        foreignKey: "id_state_general_contract"
                     }
                 ),
             generalContract.hasMany
                 (
                     models.IndividualContract,
                     {
-                        as: "individualContracts",
-                        foreignKey: "idIndividualContract"
+                        as: "individual_contracts",
+                        foreignKey: "id_individual_contract"
                     }
                 ),
             generalContract.belongsToMany
                 (
                     models.ResponsibleSenior,
                     {
-                        through: "responsible_generalContracts",  //relation name
-                        foreignKey: "idResponsible_generalContracts"
+                        through: "responsible_general_contracts",  //relation name
+                        foreignKey: "id_responsible_general_contracts"
                     }
                 )
     }

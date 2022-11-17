@@ -1,5 +1,5 @@
 const { validationResult } = require('express-validator');
-const User = require('../database/models');
+const { User } = require('../database/models');
 const bcrypt = require('../helpers/bcrypt');
 const jwt = require('../helpers/jwt');
 
@@ -26,7 +26,7 @@ module.exports = {
             } else {    //new user
                 try {
                     const { name, lastname, email, password } = req.body;
-                    const newUser = await User.create({
+                    const { dataValues: newUser } = await User.create({
                         name,
                         lastname,
                         email,
@@ -39,6 +39,7 @@ module.exports = {
                     res.status(200).json({
                         msg: "user created successfully",
                         data: newUser,
+                        token,
                         status: "success",
                     })
                 } catch (error) {
@@ -48,12 +49,18 @@ module.exports = {
                         error,
                         status: "error"
                     })
-
                 }
             }
-
+        } else {
+            //validations with errors
+            //TODO: delete avatar img uploaded
+            res.status(400).json({
+                msg: "the form has input errors",
+                error: errors,
+                returnData: req.body,
+                status: "bad request"
+            })
         }
-        res.send("creating a new user");
     },
     edit: (req, res) => {
         res.send("modifying an existing user");

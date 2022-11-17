@@ -2,10 +2,19 @@ module.exports = (sequelize, DataTypes) => {
     const fee = sequelize.define(
         "Fee", //alias
         {   //table structure
-            nro_fee: DataTypes.INTEGER(2),
-            first_expired_date: DataTypes.DATE,
+            financing: {
+                type: DataTypes.INTEGER(2),
+                allowNull: false,
+            },
+            first_expired_date: {
+                type: DataTypes.DATE,
+                allowNull: false,
+            },
             last_expired_date: DataTypes.DATE,
-            first_expired_value: DataTypes.DECIMAL(8, 2),
+            first_expired_value: {
+                type: DataTypes.DECIMAL(8, 2),
+                allowNull: false,
+            },
             last_expired_value: DataTypes.DECIMAL(8, 2),
         },
         {   //configs
@@ -19,13 +28,13 @@ module.exports = (sequelize, DataTypes) => {
 
     fee.associate = (models) => {
         fee.belongsTo
-        (
-            models.IndividualContract,
-            {
-                as: "individualContract",  //relation name
-                foreignKey: "idFee"
-            }
-        )
+            (
+                models.IndividualContract,
+                {
+                    as: "individual_contract",  //relation name
+                    foreignKey: "id_fee"
+                }
+            )
     }
 
     return fee;

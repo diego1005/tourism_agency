@@ -2,11 +2,17 @@ module.exports = (sequelize, DataTypes) => {
     const travelDestination = sequelize.define(
         "TravelDestination", //alias
         {   //table structure
-            name: DataTypes.STRING(45),
-            description: DataTypes.TEXT,
+            name: {
+                type: DataTypes.STRING(45),
+                allowNull: false,
+            },
+            description: {
+                type: DataTypes.TEXT,
+                allowNull: false,
+            }
         },
         {   //configs
-            tablename: "travelDestinations",
+            tablename: "travel_destinations",
             Timestamps: true,
             createdAt: "created_at",
             updatedAt: "updated_at",
@@ -19,8 +25,8 @@ module.exports = (sequelize, DataTypes) => {
         (
             models.GeneralContract,
             {
-                as: "generalContracts",  //relation name
-                foreignKey: "idTravelDestination"
+                as: "general_contracts",  //relation name
+                foreignKey: "id_travel_destination"
             }
         )
     }

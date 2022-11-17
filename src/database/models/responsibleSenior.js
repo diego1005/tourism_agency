@@ -2,13 +2,33 @@ module.exports = (sequelize, DataTypes) => {
     const responsibleSenior = sequelize.define(
         "ResponsibleSenior", //alias
         {   //table structure
-            dni: DataTypes.STRING(11),
-            name: DataTypes.STRING(45),
-            lastname: DataTypes.STRING(45),
-            birth_date: DataTypes.DATE,
+            dni: {
+                type: DataTypes.STRING(11),
+                allowNull: false,
+            },
+            name: {
+                type: DataTypes.STRING(45),
+                allowNull: false,
+            },
+            lastname: {
+                type: DataTypes.STRING(45),
+                allowNull: false,
+            },
+            email: {
+                type: DataTypes.STRING(45),
+                allowNull: false,
+            },
+            birth_date: {
+                type: DataTypes.DATE,
+                allowNull: false,
+            },
+            phone: {
+                type: DataTypes.STRING(12),
+                allowNull: false,
+            }
         },
         {   //configs
-            tablename: "responsiblSeniors",
+            tablename: "resposible_senior",
             Timestamps: true,
             createdAt: "created_at",
             updatedAt: "updated_at",
@@ -21,8 +41,8 @@ module.exports = (sequelize, DataTypes) => {
             (
                 models.GeneralContract,
                 {
-                    through: "responsible_generalContracts",  //relation name
-                    foreignKey: "idResponsible_generalContracts"
+                    through: "responsible_general_contracts",  //relation name
+                    foreignKey: "id_responsible_general_contracts"
                 }
             )
     }

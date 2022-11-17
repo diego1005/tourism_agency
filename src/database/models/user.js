@@ -2,8 +2,23 @@ module.exports = (sequelize, DataTypes) => {
     const user = sequelize.define(
         "User", //alias
         {   //table structure
-            username: DataTypes.STRING(45),
-            password: DataTypes.STRING(45)
+            name: {
+                type: DataTypes.STRING(45),
+                allowNull: false,
+            },
+            lastname: {
+                type: DataTypes.STRING(45),
+                allowNull: false,
+            },
+            email: {
+                type: DataTypes.STRING(45),
+                allowNull: false,
+                unique: true,
+            },
+            password: {
+                type: DataTypes.STRING(200),
+                allowNull: false,
+            }
         },
         {   //configs
             tablename: "users",
@@ -19,10 +34,18 @@ module.exports = (sequelize, DataTypes) => {
             (
                 models.IndividualContract,
                 {
-                    as: "individualContracts",  //relation name
-                    foreignKey: "idUser"
+                    as: "individual_contracts",  //relation name
+                    foreignKey: "id_user"
                 }
-            )
+            ),
+            user.belongsTo
+                (
+                    models.Role,
+                    {
+                        as: "role",
+                        foreignKey: "id_role"
+                    }
+                )
     }
 
     return user;

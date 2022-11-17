@@ -8,13 +8,13 @@ CREATE TABLE users (
     lastname VARCHAR(45) NOT NULL,
     email VARCHAR(45) UNIQUE NOT NULL,
     password VARCHAR(45) NOT NULL,
-    roleiD INTEGER NOT NULL,
+    id_role INTEGER NOT NULL,
     FOREIGN KEY roleId REFERENCES role(id)
 );
 
 CREATE TABLE role (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(45) NOT NULL,
+    name VARCHAR(25) NOT NULL,
     description TEXT
 );
 
@@ -24,16 +24,16 @@ CREATE TABLE individual_contracts (
     indicated_date DATE NOT NULL,
     indicated_value DECIMAL(8,2) NOT NULL,
     payment_method VARCHAR(25) NOT NULL,
-    idUser INT NOT NULL,
-    idStudent INT NOT NULL,
-    idGeneralContract INT NOT NULL,
-    idFee INT,
-    idStateContract INT NOT NULL,
-    FOREIGN KEY (idUser) REFERENCES students(id),
-    FOREIGN KEY (idStudent) REFERENCES students(id),
-    FOREIGN KEY (idGeneralContract) REFERENCES general_contracts(id),
-    FOREIGN KEY (idFee) REFERENCES fees(id),
-    FOREIGN KEY (idStateContract) REFERENCES state_contracts(id)
+    id_user INT NOT NULL,
+    id_student INT NOT NULL,
+    id_general_contract INT NOT NULL,
+    id_fee INT,
+    id_state_individual_contract INT NOT NULL,
+    FOREIGN KEY (id_user) REFERENCES students(id),
+    FOREIGN KEY (id_student) REFERENCES students(id),
+    FOREIGN KEY (id_general_contract) REFERENCES general_contracts(id),
+    FOREIGN KEY (id_fee) REFERENCES fees(id),
+    FOREIGN KEY (id_state_individual_contract) REFERENCES state_individual_contracts(id)
 );
 
 CREATE TABLE students (
@@ -41,8 +41,8 @@ CREATE TABLE students (
     dni VARCHAR(11) NOT NULL,
     birth_date DATE NOT NULL,
     phone VARCHAR(12) NOT NULL,
-    idUser INT NOT NULL,
-    FOREIGN KEY idUser REFERENCES users(id)
+    id_user INT NOT NULL,
+    FOREIGN KEY id_user REFERENCES users(id)
 );
 
 CREATE TABLE fees (
@@ -65,14 +65,14 @@ CREATE TABLE general_contracts (
     indicated_date DATE NOT NULL,
     indicated_value DECIMAL(11, 2) NOT NULL,
     travel_date DATE NOT NULL,
-    idTravelDestination INT NOT NULL,
-    idStateContract INT NOT NULL,
-    idIndividualContract INT NOT NULL,
-    idResponsible_generalContracts INT NOT NULL,
-    FOREIGN KEY idTravelDestination REFERENCES travel_destination(id),
-    FOREIGN KEY idStateContract REFERENCES state_contracts(id),
-    FOREIGN KEY idIndividualContract REFERENCES individual_contracts(id),
-    FOREIGN KEY idResponsible_generalContracts REFERENCES responsible_generalContracts(id),
+    id_travel_destination INT NOT NULL,
+    id_state_general_contract INT NOT NULL,
+    id_individual_contract INT NOT NULL,
+    id_responsible_general_contract INT NOT NULL,
+    FOREIGN KEY id_travel_destination REFERENCES travel_destination(id),
+    FOREIGN KEY id_state_general_contract REFERENCES state_general_contracts(id),
+    FOREIGN KEY id_individual_contract REFERENCES individual_contracts(id),
+    FOREIGN KEY id_responsible_general_contract REFERENCES responsible_general_contracts(id),
 );
 
 CREATE TABLE state_general_contracts (
@@ -86,10 +86,10 @@ CREATE TABLE travel_destination (
     description TEXT NOT NULL
 );
 
-CREATE TABLE responsible_generalContracts (
+CREATE TABLE responsible_general_contracts (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    idGeneralContracts INT NOT NULL,
-    idResponsibleSenior INT NOT NULL
+    id_general_contracts INT NOT NULL,
+    id_responsible_senior INT NOT NULL
 );
 
 CREATE TABLE responsible_senior (
@@ -100,6 +100,6 @@ CREATE TABLE responsible_senior (
     email VARCHAR(45) UNIQUE NOT NULL,
     birth_date DATE NOT NULL,
     phone VARCHAR(12) NOT NULL,
-    idResponsible_generalContracts INT NOT NULL,
-    FOREIGN KEY idResponsible_generalContracts REFERENCES responsible_generalContracts(id)
+    id_responsible_general_contract INT NOT NULL,
+    FOREIGN KEY id_responsible_general_contract REFERENCES responsible_general_contracts(id)
 );
