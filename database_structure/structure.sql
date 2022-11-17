@@ -6,8 +6,16 @@ CREATE TABLE users (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(45) NOT NULL,
     lastname VARCHAR(45) NOT NULL,
-    email VARCHAR(45) NOT NULL,
+    email VARCHAR(45) UNIQUE NOT NULL,
     password VARCHAR(45) NOT NULL,
+    roleiD INTEGER NOT NULL,
+    FOREIGN KEY roleId REFERENCES role(id)
+);
+
+CREATE TABLE role (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(45) NOT NULL,
+    description TEXT
 );
 
 CREATE TABLE individual_contracts (
@@ -15,6 +23,7 @@ CREATE TABLE individual_contracts (
     nro_contract INT NOT NULL,
     indicated_date DATE NOT NULL,
     indicated_value DECIMAL(8,2) NOT NULL,
+    payment_method VARCHAR(25) NOT NULL,
     idUser INT NOT NULL,
     idStudent INT NOT NULL,
     idGeneralContract INT NOT NULL,
@@ -30,23 +39,24 @@ CREATE TABLE individual_contracts (
 CREATE TABLE students (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     dni VARCHAR(11) NOT NULL,
-    name VARCHAR(45) NOT NULL,
-    lastname VARCHAR(45) NOT NULL,
-    birth_date DATE NOT NULL
+    birth_date DATE NOT NULL,
+    phone VARCHAR(12) NOT NULL,
+    idUser INT NOT NULL,
+    FOREIGN KEY idUser REFERENCES users(id)
 );
 
 CREATE TABLE fees (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    nro_fee INT(2) NOT NULL,
+    financing INT(2) NOT NULL,
     first_expired_date DATE NOT NULL,
     last_expired_date DATE,
     first_expired_value DECIMAL(8, 2) NOT NULL,
     last_expired_value DECIMAL(8, 2),
 );
 
-CREATE TABLE state_contracts (
+CREATE TABLE state_individual_contracts (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    description TEXT NOT NULL
+    state TEXT NOT NULL
 );
 
 CREATE TABLE general_contracts (
@@ -63,6 +73,11 @@ CREATE TABLE general_contracts (
     FOREIGN KEY idStateContract REFERENCES state_contracts(id),
     FOREIGN KEY idIndividualContract REFERENCES individual_contracts(id),
     FOREIGN KEY idResponsible_generalContracts REFERENCES responsible_generalContracts(id),
+);
+
+CREATE TABLE state_general_contracts (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    state TEXT NOT NULL
 );
 
 CREATE TABLE travel_destination (
@@ -82,7 +97,9 @@ CREATE TABLE responsible_senior (
     dni VARCHAR(11) NOT NULL,
     name VARCHAR(45) NOT NULL,
     lastname VARCHAR(45) NOT NULL,
+    email VARCHAR(45) UNIQUE NOT NULL,
     birth_date DATE NOT NULL,
+    phone VARCHAR(12) NOT NULL,
     idResponsible_generalContracts INT NOT NULL,
     FOREIGN KEY idResponsible_generalContracts REFERENCES responsible_generalContracts(id)
 );
