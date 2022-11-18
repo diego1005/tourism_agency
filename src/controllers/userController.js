@@ -4,11 +4,44 @@ const bcrypt = require('../helpers/bcrypt');
 const jwt = require('../helpers/jwt');
 
 module.exports = {
-    get: (req, res) => {
-        res.send("there are all users");
+    get: async (req, res) => {
+        try {
+            const listUsers = await User.findAll({
+                attributes: ["name", "lastname", "email", "id_role"]
+            });
+            res.status(200).json({
+                count: listUsers.length,
+                data: listUsers,
+                status: "success",
+            })
+        } catch (error) {
+            //TODO: Create a helper endpoint error respons
+            res.status(409).json({
+                msg: "An error has ocurred trying to bring the users",
+                error,
+                status: "error"
+            })
+        }
     },
-    getById: (req, res) => {
-        res.send("there is a user");
+    getById: async (req, res) => {
+        try {
+            const { id } = req.params
+            const user = await User.findOne({
+                attributes: ["name", "lastname", "email", "id_role"],
+                where: { id }
+            })
+            res.status(200).json({
+                msg: "user found",
+                data: user,
+                status: "success",
+            })
+        } catch (error) {
+            res.status(409).json({
+                msg: "An error has ocurred trying to bring the user",
+                error,
+                status: "error"
+            })
+        }
     },
     add: async (req, res) => {
         //form fields validations
@@ -71,7 +104,21 @@ module.exports = {
     editImg: (req, res) => {
         res.send("change user avatar");
     },
-    delete: (req, res) => {
-        res.send("delete an existing user");
+    delete: async (req, res) => {
+        try {
+            const { id } = req.params;
+            const result = User.destroy({ where: { id } });
+            res.status(200).json({
+                msg: "user deleted successfully",
+                data: result,
+                status: "success",
+            })
+        } catch (error) {
+            res.status(409).json({
+                msg: "An error has ocurred trying to delete the user",
+                error,
+                status: "error"
+            })
+        }
     }
 }

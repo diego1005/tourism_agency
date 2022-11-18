@@ -9,7 +9,7 @@ CREATE TABLE users (
     email VARCHAR(45) UNIQUE NOT NULL,
     password VARCHAR(45) NOT NULL,
     id_role INTEGER NOT NULL,
-    FOREIGN KEY roleId REFERENCES role(id)
+    FOREIGN KEY id_role REFERENCES role(id)
 );
 
 CREATE TABLE role (

@@ -6,6 +6,7 @@ const userController = require('../controllers/userController');
 
 //middlewares
 const { validatesCreateForm } = require('../middlewares/userForm/validationsFields');
+const { userExist } = require('../middlewares/userRoutes/userExist');
 
 //user routes
 //read
@@ -18,6 +19,6 @@ router.post("/edit/:id", userController.edit);
 router.patch("/changePass/:id", userController.editPass);
 router.patch("/changeImg/:id", userController.editImg);
 //delete
-router.delete("/:id", userController.delete);
+router.delete("/:id", userExist, userController.delete);
 
 module.exports = router;
