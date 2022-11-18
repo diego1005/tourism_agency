@@ -21,7 +21,7 @@ const validates = {
                 return true;
             }
         }),
-        //TODO: FOR APPLY EVENTLY
+        //TODO: FOR IMPLEMENT EVENTLY
         /*
         check("url_img").custom((el, { req }) => {
             const ext = [".jpg", ".png", "jpeg", ".webp"];
