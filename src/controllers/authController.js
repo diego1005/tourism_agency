@@ -8,22 +8,30 @@ module.exports = {
         const errors = validationResult(req);
         if (errors.isEmpty()) {
             //validations without errors
-            const { password: storedPassword } = req.user;
-            const { password } = req.body;
-            const auth = await bcrypt.compare(password, storedPassword);
-            if (!auth) {
-                res.status(401).json({
-                    msg: "Password doesn't match",
-                    status: "Unauthorized",
+            try {
+                const { password: storedPassword } = req.user;
+                const { password } = req.body;
+                const auth = await bcrypt.compare(password, storedPassword);
+                if (!auth) {
+                    res.status(401).json({
+                        msg: "Password doesn't match",
+                        status: "Unauthorized",
+                    });
+                } else {
+                    //creates security token
+                    const token = jwt.sign(req.user)
+                    res.status(200).json({
+                        msq: "user logged in successfully",
+                        token,
+                        status: "success"
+                    })
+                }
+            } catch (error) {
+                res.status(409).json({
+                    msg: "An error has ocurred trying to log in",
+                    error,
+                    status: "error",
                 });
-            } else {
-                //creates security token
-                const token = jwt.sign(req.user)
-                res.status(200).json({
-                    msq: "user logged in successfully",
-                    token,
-                    status: "success"
-                })
             }
         } else {
             //validations with errors
@@ -35,4 +43,19 @@ module.exports = {
             });
         }
     },
+    logout: (req, res) => {
+        try {
+            req.headers.authorization = null;
+            res.status(200).json({
+                msg: "user logout successfully",
+                status: "success"
+            })
+        } catch (error) {
+            res.status(500).json({
+                msg: "error when trying to logout user",
+                error: error,
+                status: "denied"
+            })
+        }
+    }
 }

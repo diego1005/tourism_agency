@@ -13,5 +13,7 @@ const { userExist } = require('../middlewares/userMiddlewares/userMiddlewares');
 //auth routes
 //login
 router.post("/login", validatesLoginForm, userExist, authController.login);
+//logout
+router.get("/logout", authController.logout);
 
 module.exports = router;
