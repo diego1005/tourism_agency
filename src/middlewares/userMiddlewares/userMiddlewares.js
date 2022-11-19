@@ -1,6 +1,7 @@
 const { User } = require('../../database/models');
 
 module.exports = {
+    //Checks if user exist in the database, for bringing it
     userExist: async (req, res, next) => {
         const { id } = req.params;
         const { dataValues: user } = await User.findByPk(id) || { dataValues: null };
@@ -14,6 +15,7 @@ module.exports = {
             next();
         }
     },
+    //Check if email doesn't exist already
     userAlreadyExist: async (req, res, next) => {
         const { email } = req.body;
         const { dataValues: user } = await User.findOne({ where: { email } }) || { dataValues: null };

@@ -5,18 +5,22 @@ const router = Router();
 const userController = require("../controllers/userController");
 
 //middlewares
+//form middlewares
 const { validatesCreateForm, validatesEditForm, validatesChangePass } = require("../middlewares/userFormMiddlewares/validationsFields");
+//user middlewares
 const { userExist, userAlreadyExist } = require("../middlewares/userMiddlewares/userMiddlewares");
+//auth middlewares
+const { checkToken } = require("../middlewares/authMiddlewares/authMiddlewares");
 
 //user routes
 //read
 router.get("/", userController.get);
-router.get("/:id", userExist, userController.getById);
+router.get("/:id", checkToken, userExist, userController.getById);
 //create
 router.post("/add", validatesCreateForm, userAlreadyExist, userController.add);
 //update
-router.put("/edit/:id", validatesEditForm, userExist, userController.edit);
-router.patch("/changePass/:id", validatesChangePass, userExist, userController.editPass);
+router.put("/edit/:id", validatesEditForm, checkToken, userExist, userController.edit);
+router.patch("/changePass/:id", validatesChangePass, checkToken, userExist, userController.editPass);
 //TODO: FOR IMPLEMENT EVENTLY
 // router.patch("/changeImg/:id", userExist, userController.editImg);
 //delete
