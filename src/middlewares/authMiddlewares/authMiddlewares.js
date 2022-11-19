@@ -2,7 +2,7 @@ const jwt = require('../../helpers/jwt');
 
 module.exports = {
     checkToken: (req, res, next) => {
-        const { token } = req.headers['authorization'];
+        const { token } = req.headers['authorization'] || { token: null };
         const auth = jwt.verify(token);
         if (!token || !auth) {
             return res.status(404).json({
