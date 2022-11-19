@@ -5,15 +5,15 @@ const router = Router();
 const userController = require("../controllers/userController");
 
 //middlewares
-const { validatesCreateForm, validatesEditForm, validatesChangePass } = require("../middlewares/userForm/validationsFields");
-const userExist = require("../middlewares/userRoutes/userExist");
+const { validatesCreateForm, validatesEditForm, validatesChangePass } = require("../middlewares/userFormMiddlewares/validationsFields");
+const { userExist, userAlreadyExist } = require("../middlewares/userMiddlewares/userMiddlewares");
 
 //user routes
 //read
 router.get("/", userController.get);
 router.get("/:id", userExist, userController.getById);
 //create
-router.post("/add", validatesCreateForm, userController.add);
+router.post("/add", validatesCreateForm, userAlreadyExist, userController.add);
 //update
 router.put("/edit/:id", validatesEditForm, userExist, userController.edit);
 router.patch("/changePass/:id", validatesChangePass, userExist, userController.editPass);
