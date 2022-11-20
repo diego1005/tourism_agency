@@ -13,6 +13,16 @@ module.exports = {
             req.user = jwt.decode(token);
             next();
         }
-
+    },
+    userIsAdmin: (req, res, next) => {
+        const { id_role: admin } = req.body;
+        if (admin !== "1") {
+            res.status(401).json({
+                msg: "Access denied",
+                status: "unauthorized"
+            })
+        } else {
+            next();
+        }
     }
 }

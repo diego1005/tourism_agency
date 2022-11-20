@@ -7,7 +7,7 @@ module.exports = {
     get: async (req, res) => {
         try {
             const listUsers = await User.findAll({
-                attributes: ["name", "lastname", "email", "id_role"],
+                attributes: ["name", "lastname", "email"],
             });
             res.status(200).json({
                 count: listUsers.length,
@@ -142,7 +142,7 @@ module.exports = {
                         }
                     );
                     res.status(200).json({
-                        msg: "passwod changed successfully",
+                        msg: "Passwod changed successfully",
                         status: "success",
                     });
                 } else {
