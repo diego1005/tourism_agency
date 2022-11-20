@@ -15,8 +15,8 @@ module.exports = {
         }) || { dataValues: null };
         if (!user) {
             return res.status(404).json({
-                msg: "user doesn't exist",
-                status: "denied",
+                msg: "User doesn't exist",
+                status: "not found",
             });
         } else {
             req.user = user;

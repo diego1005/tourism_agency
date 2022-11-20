@@ -5,18 +5,23 @@ const router = Router();
 const { indContractController } = rquire('../../controllers/contracts/indContractController');
 
 //Middlewares
-const { validatesCreateForm, validatesEditForm } = require("../../middlewares/contractFormMiddlewares/individualContracts/validationsFields");
+//form middlewares
+const { validatesCreateForm, validatesEditForm } = require("../../middlewares/contractFormMiddlewares/individualFormContracts/validationsFields");
+//individual contract middlewares
+const { individualContractExist } = require('../../middlewares/contractMiddlewares/individualContractMiddlewares');
+
 
 //individual contracts routes
 //read
 router.get("/", indContractController.get);
-router.get("/:dni", indContractController.getByDni);
+router.get("/:dni", individualContractExist, indContractController.getByDni);
 //create
+//TODO: add middleware to check if this dni is associated to a individual contract already
 router.post("/add", validatesCreateForm, indContractController.create);
 //uddate
-router.put("/edit/:id", validatesEditForm, indContractController.edit);
+router.put("/edit/:id", individualContractExist, validatesEditForm, indContractController.edit);
 //delete
-router.delete("/delete/:id", indContractController.delete);
+router.delete("/delete/:id", individualContractExist, indContractController.delete);
 
 
 module.exports = router;
