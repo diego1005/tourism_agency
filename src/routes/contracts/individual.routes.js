@@ -2,13 +2,13 @@ const { Router } = require("express");
 const router = Router();
 
 //controller
-const { indContractController } = rquire('../../controllers/contracts/indContractController');
+const indContractController = require('../../controllers/contracts/indContractController');
 
 //Middlewares
 //form middlewares
-const { validatesCreateForm, validatesEditForm } = require("../../middlewares/contractFormMiddlewares/individualFormContracts/validationsFields");
+const { validatesCreateForm, validatesEditForm } = require('../../middlewares/contractMiddlewares/individualFormMiddlewares/validationsFields');
 //individual contract middlewares
-const { individualContractExist } = require('../../middlewares/contractMiddlewares/individualContractMiddlewares');
+const { individualContractExist, contractNumber } = require('../../middlewares/contractMiddlewares/individualContractMiddlewares');
 
 
 //individual contracts routes
@@ -17,7 +17,7 @@ router.get("/", indContractController.get);
 router.get("/:dni", individualContractExist, indContractController.getByDni);
 //create
 //TODO: add middleware to check if this dni is associated to a individual contract already
-router.post("/add", validatesCreateForm, indContractController.create);
+router.post("/add", /*validatesCreateForm,*/ contractNumber, indContractController.create);
 //uddate
 router.put("/edit/:id", individualContractExist, validatesEditForm, indContractController.edit);
 //delete

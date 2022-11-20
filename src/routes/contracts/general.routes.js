@@ -2,18 +2,18 @@ const { Router } = require("express");
 const router = Router();
 
 //controller
-const { genContractController } = rquire('../../controllers/contracts/genContractController');
+const genContractController = require('../../controllers/contracts/genContractController');
 
 //Middlewares
 //form validates middlewares
-const { validatesCreateForm, validatesEditForm } = require("../../middlewares/contractFormMiddlewares/generalFormContracts/validationsFields");
+const { validatesCreateForm, validatesEditForm } = require('../../middlewares/contractMiddlewares/generalFormMiddlewares/validationsFields');
 //general contract middlewares
 const { generalContractExist } = require("../../middlewares/contractMiddlewares/generalContractMiddlewares");
 
 //general contracts routes
 //read
 router.get("/", genContractController.get);
-router.get("/:id", generalContractExist, genContractController.getByid);
+router.get("/:id", generalContractExist, genContractController.getById);
 //create
 //TODO: add middleware to check if this individual contract is associated to a general contract already
 router.post("/add", validatesCreateForm, genContractController.create);

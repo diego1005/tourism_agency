@@ -4,7 +4,6 @@ const path = require("path");
 const validates = {
     //create general contracts validations
     validatesCreateForm: [
-        check("nro_contract").notEmpty().withMessage("This field is required"),
         check("indicated_date").notEmpty().withMessage("This field is required"),
         check("indicated_value").notEmpty().withMessage("This field is required"),
         check("travel_date").notEmpty().withMessage("This field is required"),

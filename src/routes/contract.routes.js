@@ -2,8 +2,8 @@ const { Router } = require("express");
 const router = Router();
 
 //rutes files
-const indContractRoutes = require('./individual.routes');
-const genContractRoutes = require('./general.routes');
+const indContractRoutes = require('./contracts/individual.routes');
+const genContractRoutes = require('./contracts/general.routes');
 
 //Middleware
 //auth middlewares

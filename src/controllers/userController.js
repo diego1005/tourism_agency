@@ -23,20 +23,12 @@ module.exports = {
             });
         }
     },
-    getById: async (req, res) => {
-        try {
-            res.status(200).json({
-                msg: "user found",
-                data: req.user,
-                status: "success",
-            });
-        } catch (error) {
-            res.status(409).json({
-                msg: "An error has ocurred trying to bring the user",
-                error,
-                status: "error",
-            });
-        }
+    getById: (req, res) => {
+        res.status(200).json({
+            msg: "user found",
+            data: req.user,
+            status: "success",
+        });
     },
     add: async (req, res) => {
         //form fields validations

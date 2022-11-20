@@ -4,7 +4,7 @@ module.exports = {
     get: (req, res) => {
 
     },
-    getByDni: (req, res) => {
+    getById: (req, res) => {
 
     },
     create: (req, res) => {
