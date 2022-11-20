@@ -5,8 +5,12 @@ const router = Router();
 const indContractRoutes = require('./individual.routes');
 const genContractRoutes = require('./general.routes');
 
+//Middleware
+//auth middlewares
+const { userIsAdmin } = require('../middlewares/authMiddlewares/authMiddlewares');
+
 //routes
-router.use("/individual", indContractRoutes);
-router.use("/general", genContractRoutes);
+router.use("/individual", userIsAdmin, indContractRoutes);
+router.use("/general", userIsAdmin, genContractRoutes);
 
 module.exports = router;
