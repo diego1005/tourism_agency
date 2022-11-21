@@ -37,13 +37,14 @@ module.exports = {
             //validations without errors
             //new user
             try {
-                const { name, lastname, email, password } = req.body;
+                const user = req.student || req.admin;
+                const { password } = user;
+                hashPassword = await bcrypt.hash(password);
+                delete user.password;
                 const { dataValues: newUser } = await User.create({
-                    name,
-                    lastname,
-                    email,
-                    password: await bcrypt.hash(password),
-                });
+                    ...user,
+                    password: hashPassword,
+                })
                 //delete password from newUser data
                 delete newUser.password;
                 //generates token
@@ -55,6 +56,7 @@ module.exports = {
                     status: "success",
                 });
             } catch (error) {
+                console.log(error);
                 //TODO: delete avatar img uploaded
                 res.status(409).json({
                     msg: "An error has ocurred trying to create the user",

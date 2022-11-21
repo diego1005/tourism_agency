@@ -8,7 +8,7 @@ const userController = require("../controllers/userController");
 //form middlewares
 const { validatesCreateForm, validatesEditForm, validatesChangePass } = require("../middlewares/userFormMiddlewares/validationsFields");
 //user middlewares
-const { userExist, userAlreadyExist } = require("../middlewares/userMiddlewares/userMiddlewares");
+const { userExist, userAlreadyExist, roleUser } = require("../middlewares/userMiddlewares/userMiddlewares");
 //auth middlewares
 const { checkToken } = require("../middlewares/authMiddlewares/authMiddlewares");
 
@@ -17,7 +17,7 @@ const { checkToken } = require("../middlewares/authMiddlewares/authMiddlewares")
 router.get("/", userController.get);
 router.get("/:id", checkToken, userExist, userController.getById);
 //create
-router.post("/add", validatesCreateForm, userAlreadyExist, userController.add);
+router.post("/add", validatesCreateForm, userAlreadyExist, roleUser, userController.add);
 //update
 router.put("/edit/:id", validatesEditForm, checkToken, userExist, userController.edit);
 router.patch("/changePass/:id", validatesChangePass, checkToken, userExist, userController.editPass);

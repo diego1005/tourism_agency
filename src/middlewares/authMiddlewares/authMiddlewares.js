@@ -1,3 +1,4 @@
+const { USER_ADMIN_ROLE } = require('../../constants/roles');
 const jwt = require('../../helpers/jwt');
 
 module.exports = {
@@ -16,7 +17,7 @@ module.exports = {
     },
     userIsAdmin: (req, res, next) => {
         const { id_role: admin } = req.body;
-        if (admin !== "1") {
+        if (admin !== USER_ADMIN_ROLE) {
             res.status(401).json({
                 msg: "Access denied",
                 status: "unauthorized"
