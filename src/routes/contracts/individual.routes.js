@@ -10,6 +10,8 @@ const stateIndController = require('../../controllers/contracts/stateIndControll
 const { validatesCreateForm, validatesEditForm } = require('../../middlewares/contractMiddlewares/individualFormMiddlewares/validationsFields');
 //individual contract middlewares
 const { individualContractExist, contractNumber } = require('../../middlewares/contractMiddlewares/individualContractMiddlewares');
+//state contracts middlewares
+const { stateIndividualExist } = require('../../middlewares/contractMiddlewares/stateContractMiddlewares');
 
 //individual contracts routes
 //read
@@ -17,7 +19,7 @@ router.get("/", indContractController.get);
 router.get("/:dni", individualContractExist, indContractController.getByDni);
 //create
 //TODO: add middleware to check if this dni is associated to a individual contract already
-router.post("/add", /*validatesCreateForm,*/ contractNumber, indContractController.create);
+router.post("/add", validatesCreateForm, contractNumber, indContractController.create);
 //update
 router.put("/edit/:id", individualContractExist, validatesEditForm, indContractController.edit);
 //delete
@@ -25,8 +27,8 @@ router.delete("/delete/:id", individualContractExist, indContractController.dele
 
 //state individual contracts routes
 //read
-router.get("/state", stateIndController.get);
-router.get("/state/:id", stateIndController.getByContract);
+router.get("/state/all/:idState", stateIndividualExist, stateIndController.getAllContractsByState); //get all contract with that state
+router.get("/state/:idContract", individualContractExist, stateIndController.getStateByContract); //get state of specific contract
 //create
 router.post("/state/add", stateIndController.create);
 //update

@@ -15,7 +15,7 @@ module.exports = {
                 }
             }) || { dataValues: null };
             if (!contract) {
-                return res.status(404).json({
+                res.status(404).json({
                     msg: "Contract doesn't exist",
                     status: "not found",
                 });

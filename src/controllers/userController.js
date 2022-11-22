@@ -30,7 +30,7 @@ module.exports = {
             status: "success",
         });
     },
-    add: async (req, res) => {
+    create: async (req, res) => {
         //form fields validations
         const errors = validationResult(req);
         if (errors.isEmpty()) {
