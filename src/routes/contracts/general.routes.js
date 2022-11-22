@@ -3,6 +3,7 @@ const router = Router();
 
 //controller
 const genContractController = require('../../controllers/contracts/genContractController');
+const stateGenController = require('../../controllers/contracts/stateGenController');
 
 //Middlewares
 //form validates middlewares
@@ -21,6 +22,17 @@ router.post("/add", validatesCreateForm, genContractController.create);
 router.put("/edit/:id", generalContractExist, validatesEditForm, genContractController.edit);
 //delete
 router.delete("/delete/:id", generalContractExist, genContractController.delete);
+
+//state general contracts routes
+//read
+router.get("/state", stateGenController.get);
+router.get("/state/:id", stateGenController.getByContract);
+//create
+router.post("/state/add", stateGenController.create);
+//update
+router.put("/state/:id", stateGenController.edit);
+//delete
+router.delete("/state/:id", stateGenController.delete);
 
 
 module.exports = router;
