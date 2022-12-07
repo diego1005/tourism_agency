@@ -57,5 +57,23 @@ module.exports = {
                 status: "denied"
             })
         }
-    }
+    },
+    //CHECK TOKEN
+    checkToken: (req, res) => {
+        const userToken = req.headers["authorization"];
+        jwt.verify(userToken, process.env.SECRET_KEY, (err, decoded) => {
+            if (err) {
+                res.status(200).json({
+                    msg: "missing token or invalid",
+                    action: "redirect",
+                    status: "denied"
+                });
+            } else {
+                res.status(200).json({
+                    token: userToken,
+                    status: "success"
+                })
+            }
+        })
+    },
 }
