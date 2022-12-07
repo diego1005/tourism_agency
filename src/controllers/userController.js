@@ -27,6 +27,7 @@ module.exports = {
         res.status(200).json({
             msg: "user found",
             data: req.user,
+            token: req.token,
             status: "success",
         });
     },

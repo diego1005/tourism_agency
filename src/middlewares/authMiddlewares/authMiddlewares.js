@@ -12,6 +12,7 @@ module.exports = {
             });
         } else {
             req.user = jwt.decode(token);
+            req.token = token;
             next();
         }
     },
