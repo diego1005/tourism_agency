@@ -12,7 +12,7 @@ const { userExist } = require('../middlewares/userMiddlewares/userMiddlewares');
 
 //auth routes
 //check token
-router.get("checkToken", authController.checkToken);
+router.get("/checkToken", authController.checkToken);
 //login
 router.post("/login", validatesLoginForm, userExist, authController.login);
 //logout
