@@ -19,7 +19,8 @@ module.exports = {
                     });
                 } else {
                     //creates security token
-                    const token = jwt.sign(req.user)
+                    const { user } = req;
+                    const token = jwt.sign(user)
                     res.status(200).json({
                         msq: "user logged in successfully",
                         token,
@@ -42,6 +43,14 @@ module.exports = {
                 status: "bad request",
             });
         }
+    },
+    checkToken: (req, res) => {
+        const { id } = req.user;
+        res.status(200).json({
+            msg: "token is valid",
+            id: id,
+            status: "success",
+        })
     },
     logout: (req, res) => {
         try {

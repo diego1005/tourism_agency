@@ -10,11 +10,10 @@ module.exports = jwt = {
         return jsonWebToken.decode(token, process.env.SECRET);
     },
     //Checks token's validation
-    verify: (token) => {
+    verify: (token) =>
         jsonWebToken.verify(token, process.env.SECRET, (error) => {
             if (error) return false;
 
             return true;
         })
-    }    
 };
