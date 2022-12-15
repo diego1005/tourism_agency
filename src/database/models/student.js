@@ -6,14 +6,6 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING(11),
                 allowNull: false,
             },
-            firstname: {
-                type: DataTypes.STRING(45),
-                allowNull: false,
-            },
-            lastname: {
-                type: DataTypes.STRING(45),
-                allowNull: false,
-            },
             birth_date: {
                 type: DataTypes.DATE,
                 allowNull: false,
@@ -33,12 +25,12 @@ module.exports = (sequelize, DataTypes) => {
     )
 
     student.associate = (models) => {
-        student.belongsToMany
+        student.belongsTo
             (
-                models.IndividualContract,
+                models.User,
                 {
-                    through: "individual_contract_students",  //intermediate table name
-                    foreignKey: "id_individual_contract_student",
+                    as: "user_student",
+                    foreignKey: "id_student",
                 }
             )
     }

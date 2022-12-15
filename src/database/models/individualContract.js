@@ -37,14 +37,6 @@ module.exports = (sequelize, DataTypes) => {
                     foreignKey: "id_user"
                 }
             ),
-            individualContract.belongsToMany
-                (
-                    models.Student,
-                    {
-                        through: "individual_contract_students",  //intermediate table name
-                        foreignKey: "id_individual_contract_student",
-                    }
-                ),
             individualContract.hasMany
                 (
                     models.Fee,

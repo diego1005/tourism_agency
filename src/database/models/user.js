@@ -30,12 +30,20 @@ module.exports = (sequelize, DataTypes) => {
     )
 
     user.associate = (models) => {
+        user.hasOne
+            (
+                models.Student,
+                {
+                    as: "user_student",
+                    foreignKey: "id_student",
+                }
+            )
         user.hasMany
             (
                 models.IndividualContract,
                 {
                     as: "individual_contracts",  //relation name
-                    foreignKey: "id_user"
+                    foreignKey: "id_user",
                 }
             ),
             user.belongsTo
