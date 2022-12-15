@@ -9,7 +9,7 @@ const validates = {
     ],
     //Signin validations
     validatesCreateForm: [
-        check("name").notEmpty().withMessage("This field is required"),
+        check("firstname").notEmpty().withMessage("This field is required"),
         check("lastname").notEmpty().withMessage("This field is required"),
         check("email").notEmpty().withMessage("This field is required").bail().isEmail().withMessage("email invalid"),
         check("password").notEmpty().withMessage("This field is required"),
@@ -33,7 +33,7 @@ const validates = {
     //Edit validations
     //For common data
     validatesEditForm: [
-        check("name").notEmpty().withMessage("This field is required"),
+        check("firstname").notEmpty().withMessage("This field is required"),
         check("lastname").notEmpty().withMessage("This field is required"),
         check("email").notEmpty().withMessage("This field is required").bail().isEmail().withMessage("email invalid")
     ],
