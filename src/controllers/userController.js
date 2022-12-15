@@ -49,6 +49,8 @@ module.exports = {
                         ...user,
                         password: hashPassword,
                     });
+                    console.log(newUser);
+                    /*
                     const newStudent = await Student.create({
                         ...user,
                     })
@@ -72,7 +74,8 @@ module.exports = {
                     data: newUser,
                     token,
                     status: "success",
-                });
+                });*/
+            }
             } catch (error) {
                 console.log(error);
                 //TODO: delete avatar img uploaded
