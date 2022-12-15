@@ -33,12 +33,12 @@ module.exports = (sequelize, DataTypes) => {
     )
 
     student.associate = (models) => {
-        student.belongsTo
+        student.belongsToMany
             (
                 models.IndividualContract,
                 {
-                    as: "individual_contract",  //relation name
-                    foreignKey: "id_student"
+                    through: "individual_contract_students",  //intermediate table name
+                    foreignKey: "id_individual_contract_student",
                 }
             )
     }

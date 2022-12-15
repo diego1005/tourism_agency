@@ -37,12 +37,12 @@ module.exports = (sequelize, DataTypes) => {
                     foreignKey: "id_user"
                 }
             ),
-            individualContract.hasMany
+            individualContract.belongsToMany
                 (
                     models.Student,
                     {
-                        as: "students",
-                        foreignKey: "id_student"
+                        through: "individual_contract_students",  //intermediate table name
+                        foreignKey: "id_individual_contract_student",
                     }
                 ),
             individualContract.hasMany
