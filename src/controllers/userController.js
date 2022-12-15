@@ -39,13 +39,30 @@ module.exports = {
             //new user
             try {
                 const user = req.student || req.admin;
-                const { firstname, lastname, email, password } = user;
-                hashPassword = await bcrypt.hash(password);
+                const { password } = user;
+                const hashPassword = await bcrypt.hash(password);
                 delete user.password;
-                const { dataValues: newUser } = await User.create({
-                    ...user,
-                    password: hashPassword,
-                })
+                let newUser = {};
+                console.log(user);
+                if (req.student) {
+                    newUser = await User.create({
+                        ...user,
+                        password: hashPassword,
+                    });
+                    const newStudent = await Student.create({
+                        ...user,
+                    })
+                    newUser = {
+                        ...newUser,
+                        newStudent,
+                    }
+                }
+                if (req.admin) {
+                    newUser = await User.create({
+                        ...user,
+                        password: hashPassword,
+                    });
+                }
                 //delete password from newUser data
                 delete newUser.password;
                 //generates token

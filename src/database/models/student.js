@@ -29,10 +29,9 @@ module.exports = (sequelize, DataTypes) => {
             (
                 models.User,
                 {
-                    as: "user_student",
-                    foreignKey: "id_student",
+                    foreignKey: "id_user",
                 }
-            )
+            );
     }
 
     return student;
