@@ -39,7 +39,7 @@ module.exports = {
             //new user
             try {
                 const user = req.student || req.admin;
-                const { password } = user;
+                const { firstname, lastname, email, password } = user;
                 hashPassword = await bcrypt.hash(password);
                 delete user.password;
                 const { dataValues: newUser } = await User.create({
