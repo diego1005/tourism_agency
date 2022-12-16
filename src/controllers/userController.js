@@ -43,20 +43,18 @@ module.exports = {
                 const hashPassword = await bcrypt.hash(password);
                 delete user.password;
                 let newUser = {};
-                console.log(user);
                 if (req.student) {
-                    newUser = await User.create({
+                    const { dataValues: userCreated } = await User.create({
                         ...user,
                         password: hashPassword,
                     });
-                    console.log(newUser);
-                    /*
-                    const newStudent = await Student.create({
+                    const { dataValues: studentCreated } = await Student.create({
                         ...user,
+                        id_user: userCreated.id,
                     })
                     newUser = {
-                        ...newUser,
-                        newStudent,
+                        userCreated,
+                        studentCreated,
                     }
                 }
                 if (req.admin) {
@@ -67,17 +65,11 @@ module.exports = {
                 }
                 //delete password from newUser data
                 delete newUser.password;
-                //generates token
-                const token = jwt.sign(newUser);
                 res.status(200).json({
                     msg: "user created successfully",
-                    data: newUser,
-                    token,
                     status: "success",
-                });*/
-            }
+                });
             } catch (error) {
-                console.log(error);
                 //TODO: delete avatar img uploaded
                 res.status(409).json({
                     msg: "An error has ocurred trying to create the user",
