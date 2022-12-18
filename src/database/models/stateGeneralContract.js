@@ -17,11 +17,11 @@ module.exports = (sequelize, DataTypes) => {
     )
 
     stateGeneralContract.associate = (models) => {
-        stateGeneralContract.belongsTo
+        stateGeneralContract.hasMany
             (
                 models.GeneralContract,
                 {
-                    as: "general_contract",  //relation name
+                    as: "state_general_contracts",  //relation name
                     foreignKey: "id_state_general_contract"
                 }
             )

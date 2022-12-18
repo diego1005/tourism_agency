@@ -1,14 +1,14 @@
 module.exports = (sequelize, DataTypes) => {
-    const stateContract = sequelize.define(
-        "StateContract", //alias
+    const paymentMethod = sequelize.define(
+        "PaymentMethod", //alias
         {   //table structure
-            state: {
-                type: DataTypes.TEXT,
+            payment: {
+                type: DataTypes.STRING(25),
                 allowNull: false,
             }
         },
         {   //configs
-            tablename: "state_individual_contracts",
+            tablename: "payment_method",
             Timestamps: true,
             createdAt: "created_at",
             updatedAt: "updated_at",
@@ -16,16 +16,16 @@ module.exports = (sequelize, DataTypes) => {
         },
     )
 
-    stateContract.associate = (models) => {
-        stateContract.hasMany
+    paymentMethod.associate = (models) => {
+        paymentMethod.hasMany
             (
                 models.IndividualContract,
                 {
-                    as: "state_individual_contracts",  //relation name
-                    foreignKey: "id_state_individual_contract"
+                    as: "individual_contracts_payment",  //relation name
+                    foreignKey: "id_individual_contract"
                 }
             )
     }
 
-    return stateContract;
+    return paymentMethod;
 }

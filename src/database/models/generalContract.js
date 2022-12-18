@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
             (
                 models.StateGeneralContract,
                 {
-                    as: "state_general_contract",
+                    as: "state_general_contracts",
                     foreignKey: "id_state_general_contract"
                 }
             );

@@ -44,7 +44,7 @@ module.exports = (sequelize, DataTypes) => {
             (
                 models.StateContract,
                 {
-                    as: "state_individual_contract",
+                    as: "state_individual_contracts",
                     foreignKey: "id_state_individual_contract"
                 }
             );
@@ -56,6 +56,14 @@ module.exports = (sequelize, DataTypes) => {
                     foreignKey: "id_general_contract"
                 }
             );
+        individualContract.belongsTo
+            (
+                models.PaymentMethod,
+                {
+                    as: "individual_contracts_payment",
+                    foreignKey: "id_individual_contract",
+                }
+            )
     }
 
     return individualContract;
