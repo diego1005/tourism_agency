@@ -7,6 +7,7 @@ const commonController = require('../controllers/commonController.js');
 //Middlewares
 
 //payment routes
+router.get("/payment/", commonController.paymentGet);
 router.post("/payment/add", commonController.paymentCreate);
 router.put("/payment/edit/:id", commonController.paymentUpgrade);
 router.delete("/payment/delete/:id", commonController.paymentDelete);
