@@ -27,6 +27,7 @@ router.delete("/delete/:id", individualContractExist, indContractController.dele
 
 //state individual contracts routes
 //read
+router.get("/state/list", stateIndController.get);
 router.get("/state/all/:idState", stateIndividualExist, stateIndController.getAllContractsByState); //get all contract with that state
 router.get("/state/:idContract", individualContractExist, stateIndController.getStateByContract); //get state of specific contract
 //create

@@ -45,11 +45,11 @@ module.exports = {
         }
     },
     checkToken: (req, res) => {
-        const { firstname, lastname, email } = req.user;
+        const { firstname, lastname, email, id_role } = req.user;
         const { token } = req;
         res.status(200).json({
             msg: "token is valid",
-            user: { firstname, lastname, email },
+            user: { firstname, lastname, email, id_role },
             token: token,
             status: "success",
         })

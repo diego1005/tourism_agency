@@ -17,7 +17,7 @@ module.exports = {
         }
     },
     userIsAdmin: (req, res, next) => {
-        const admin = req.body.id_role || req.headers["role"];
+        const admin = req.headers["role"];
         if (admin !== USER_ADMIN_ROLE) {
             res.status(401).json({
                 msg: "Access denied",
