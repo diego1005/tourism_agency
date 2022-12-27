@@ -1,6 +1,21 @@
 const { GeneralContract, StateGeneralContract } = require('../../database/models');
 
 module.exports = {
+    get: async (req, res) => {
+        try {
+            const stateGenList = await StateGeneralContract.findAll();
+            res.status(200).json({
+                data: stateGenList,
+                status: "success",
+            })
+        } catch (error) {
+            console.log(error);
+            res.status(400).json({
+                msg: "An error has ocurred when trying to bring the states of general contracts",
+                status: "denied",
+            })
+        }
+    },
     getAllContractsByState: async (req, res) => {
         try {
             const { idState } = req.params;
