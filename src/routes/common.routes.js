@@ -13,7 +13,7 @@ router.put("/payment/edit/:id", commonController.paymentUpgrade);
 router.delete("/payment/delete/:id", commonController.paymentDelete);
 
 //student routes
-router.get("/student/", commonController.getStudents);
+router.get("/student", commonController.getStudents);
 
 //responsible senior router
 router.post("/responsible/add", commonController.responsibleCreate);
@@ -21,7 +21,7 @@ router.put("/responsible/edit/:id", commonController.responsibleUpgrade);
 router.delete("/responsible/delete/:id", commonController.responsibleDelete);
 
 //travel destination  routes
-router.post("/destination", commonController.getDestinations);
+router.get("/destination", commonController.getDestinations);
 router.post("/destination/add", commonController.destinationCreate);
 router.put("/destination/edit/:id", commonController.destinationUpgrade);
 router.delete("/destination/delete/:id", commonController.destinationDelete);
