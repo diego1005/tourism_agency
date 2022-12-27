@@ -15,7 +15,7 @@ const { stateGeneralExist } = require("../../middlewares/contractMiddlewares/sta
 
 //general contracts routes
 //read
-router.get("/", genContractController.get);
+router.get("/list", genContractController.get);
 router.get("/:id", generalContractExist, genContractController.getById);
 //create
 //TODO: add middleware to check if this individual contract is associated to a general contract already
