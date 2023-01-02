@@ -1,10 +1,10 @@
 const { validationResult } = require("express-validator");
-const { individualContracts } = require('../../database/models');
+const { IndividualContract } = require('../../database/models');
 
 module.exports = {
     get: async (req, res) => {
         try {
-            const listOfContracts = await individualContracts.findAll();
+            const listOfContracts = await IndividualContract.findAll();
             if (listOfContracts) {
                 res.status(200).json({
                     count: listOfContracts.length,
@@ -18,6 +18,7 @@ module.exports = {
                 });
             }
         } catch (error) {
+            console.log(error);
             res.status(409).json({
                 msg: "An error has ocurred trying to bring the contracts",
                 error,
@@ -39,9 +40,9 @@ module.exports = {
             //validations without errors
             //new individual contract
             try {
-                
+
             } catch (error) {
-                
+
             }
         } else {
             //validations with errors

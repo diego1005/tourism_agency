@@ -4,10 +4,17 @@ module.exports = {
     get: async (req, res) => {
         try {
             const generalList = await GeneralContract.findAll();
-            res.status(200).json({
-                data: generalList,
-                status: "success",
-            })
+            if (generalList) {
+                res.status(200).json({
+                    data: generalList,
+                    status: "success",
+                })
+            } else {
+                res.status(404).json({
+                    msg: "There are no contracts yet",
+                    status: "not found",
+                });
+            }
         } catch (error) {
             console.log(error);
             res.status(400).json({

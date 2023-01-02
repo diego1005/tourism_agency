@@ -1,4 +1,4 @@
-const { PaymentMethod, Student, TravelDestination } = require('../database/models');
+const { PaymentMethod, Student, User, TravelDestination } = require('../database/models');
 
 module.exports = {
     //Payment
@@ -20,7 +20,7 @@ module.exports = {
     //Stundet
     getStudents: async (req, res) => {
         try {
-            const studentList = await Student.findAll();
+            const studentList = await Student.findAll({ include: User });
             res.status(200).json({
                 data: studentList,
                 status: "success",

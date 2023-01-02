@@ -15,7 +15,7 @@ const { stateIndividualExist } = require('../../middlewares/contractMiddlewares/
 
 //individual contracts routes
 //read
-router.get("/", indContractController.get);
+router.get("/list", indContractController.get);
 router.get("/:dni", individualContractExist, indContractController.getByDni);
 //create
 //TODO: add middleware to check if this dni is associated to a individual contract already
