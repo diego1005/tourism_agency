@@ -1,10 +1,17 @@
 const { validationResult } = require("express-validator");
-const { IndividualContract } = require('../../database/models');
+const { Contract, IndividualContract, StateContract } = require('../../database/models');
 
 module.exports = {
     get: async (req, res) => {
         try {
-            const listOfContracts = await IndividualContract.findAll();
+            const listOfContracts = await IndividualContract.findAll(
+                {
+                    include: [
+                        { model: Contract, as: "contract" },
+                        { model: StateContract, as: "state_individual_contracts" }
+                    ]
+                }
+            );
             if (listOfContracts) {
                 res.status(200).json({
                     count: listOfContracts.length,

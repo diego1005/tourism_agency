@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
             (
                 models.Contract,
                 {
+                    as: "contract",
                     foreignKey: "id_contract",
                 }
             )
