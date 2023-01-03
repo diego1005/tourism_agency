@@ -2,7 +2,7 @@ module.exports = (sequelize, DataTypes) => {
     const travelDestination = sequelize.define(
         "TravelDestination", //alias
         {   //table structure
-            name: {
+            destination: {
                 type: DataTypes.STRING(45),
                 allowNull: false,
             },
