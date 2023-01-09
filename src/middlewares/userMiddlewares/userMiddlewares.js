@@ -56,7 +56,7 @@ module.exports = {
     roleUser: (req, res, next) => {
         const { id_role } = req.body;
         delete req.body.confirmPassword;
-        if (id_role !== USER_ADMIN_ROLE) {
+        if (id_role != USER_ADMIN_ROLE) {
             req.student = req.body;
             next();
         } else {

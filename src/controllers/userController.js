@@ -96,17 +96,20 @@ module.exports = {
             try {
                 const user = req.student || req.admin;
                 const { id } = req.params;
+                const { id_user } = user;
+                delete user.id;
+                delete user.id_role;
                 let result = {};
                 if (req.student) {
                     const studentResult = await Student.update({ ...user }, { where: { id } });
-                    const userResult = await User.update({ ...user }, { where: { id } });
+                    const userResult = await User.update({ ...user }, { where: { id: id_user } });
                     result = {
                         studentResult,
                         userResult,
                     }
                 };
                 if (req.admin) {
-                    const userResult = await User.update({ user }, { where: { id } });
+                    const userResult = await User.update({ user }, { where: { id: id_user } });
                     result = { userResult };
                 }
                 res.status(200).json({
@@ -190,15 +193,16 @@ module.exports = {
         try {
             const user = req.student || req.admin;
             const { id } = req.params;
+            const { id_user } = user;
             let result = {};
             if (req.admin) {
                 const studentResult = await Student.destroy({ where: { id } });
-                const userResult = await User.destroy({ where: { id } });
+                const userResult = await User.destroy({ where: { id: id_user } });
                 result = {
                     studentResult,
                     userResult,
                 }
-            }else {
+            } else {
                 res.status(403).json({
                     msg: "You don't have required permissions",
                     status: "Unauthorized"
@@ -206,7 +210,7 @@ module.exports = {
             }
             res.status(200).json({
                 msg: "user deleted successfully",
-                data: result,
+                // data: result,
                 status: "success",
             });
         } catch (error) {
