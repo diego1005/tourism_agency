@@ -63,5 +63,5 @@ module.exports = {
             req.admin = req.body;
             next();
         }
-    }
+    },
 }

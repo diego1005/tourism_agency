@@ -19,11 +19,11 @@ router.get("/:id", checkToken, userExist, userController.getById);
 //create
 router.post("/add", validatesCreateForm, userAlreadyExist, roleUser, userController.create);
 //update
-router.put("/edit/:id", validatesEditForm, checkToken, userExist, userController.edit);
+router.put("/edit/:id", validatesEditForm, checkToken, userExist, roleUser, userController.edit);
 router.patch("/changePass/:id", validatesChangePass, checkToken, userExist, userController.editPass);
 //TODO: FOR IMPLEMENT EVENTLY
 // router.patch("/changeImg/:id", userExist, userController.editImg);
 //delete
-router.delete("/:id", userExist, userController.delete);
+router.delete("/:id", userExist, roleUser, userController.delete);
 
 module.exports = router;

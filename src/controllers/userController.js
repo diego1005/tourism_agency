@@ -94,23 +94,28 @@ module.exports = {
         if (errors.isEmpty()) {
             //validations without errors
             try {
+                const user = req.student || req.admin;
                 const { id } = req.params;
-                const { name, lastname, email } = req.body;
-                await User.update(
-                    {
-                        name,
-                        lastname,
-                        email,
-                    },
-                    {
-                        where: { id },
+                let result = {};
+                if (req.student) {
+                    const studentResult = await Student.update({ ...user }, { where: { id } });
+                    const userResult = await User.update({ ...user }, { where: { id } });
+                    result = {
+                        studentResult,
+                        userResult,
                     }
-                );
+                };
+                if (req.admin) {
+                    const userResult = await User.update({ user }, { where: { id } });
+                    result = { userResult };
+                }
                 res.status(200).json({
                     msg: "user updated successfully",
+                    data: result,
                     status: "success",
                 });
             } catch (error) {
+                console.log(error);
                 //TODO: delete avatar img uploaded
                 res.status(409).json({
                     msg: "An error has ocurred trying to edit the user",
@@ -183,8 +188,22 @@ module.exports = {
     */
     delete: async (req, res) => {
         try {
+            const user = req.student || req.admin;
             const { id } = req.params;
-            const result = await User.destroy({ where: { id } });
+            let result = {};
+            if (req.admin) {
+                const studentResult = await Student.destroy({ where: { id } });
+                const userResult = await User.destroy({ where: { id } });
+                result = {
+                    studentResult,
+                    userResult,
+                }
+            }else {
+                res.status(403).json({
+                    msg: "You don't have required permissions",
+                    status: "Unauthorized"
+                })
+            }
             res.status(200).json({
                 msg: "user deleted successfully",
                 data: result,
