@@ -103,14 +103,12 @@ module.exports = {
                 if (req.student) {
                     const studentResult = await Student.update({ ...user }, { where: { id } });
                     const userResult = await User.update({ ...user }, { where: { id: id_user } });
-                    result = {
-                        studentResult,
-                        userResult,
-                    }
+                    result = { studentResult, userResult, }
                 };
                 if (req.admin) {
-                    const userResult = await User.update({ user }, { where: { id: id_user } });
-                    result = { userResult };
+                    const studentResult = await Student.update({ ...user }, { where: { id } });
+                    const userResult = await User.update({ ...user }, { where: { id: id_user } });
+                    result = { studentResult, userResult };
                 }
                 res.status(200).json({
                     msg: "user updated successfully",
