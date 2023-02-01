@@ -25,18 +25,20 @@ module.exports = (sequelize, DataTypes) => {
     )
 
     contract.associate = (models) => {
-        contract.hasOne
+        contract.belongsTo
             (
                 models.IndividualContract,
                 {
-                    foreignKey: "id_contract",
+                    as: "ind_contract",
+                    foreignKey: "id_ind_contract",
                 }
             );
-        contract.hasOne
+        contract.belongsTo
             (
                 models.GeneralContract,
                 {
-                    foreignKey: "id_contract",
+                    as: "gen_contract",
+                    foreignKey: "id_gen_contract",
                 }
             );
     }

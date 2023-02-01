@@ -17,11 +17,12 @@ module.exports = (sequelize, DataTypes) => {
     )
 
     generalContract.associate = (models) => {
-        generalContract.belongsTo
+        generalContract.hasOne
             (
                 models.Contract,
                 {
-                    foreignKey: "id_contract",
+                    as: "gen_contract",
+                    foreignKey: "id_gen_contract",
                 }
             );
         generalContract.belongsTo

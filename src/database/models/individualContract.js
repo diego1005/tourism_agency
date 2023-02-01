@@ -17,12 +17,12 @@ module.exports = (sequelize, DataTypes) => {
     )
 
     individualContract.associate = (models) => {
-        individualContract.belongsTo
+        individualContract.hasOne
             (
                 models.Contract,
                 {
-                    as: "contract",
-                    foreignKey: "id_contract",
+                    as: "ind_contract",
+                    foreignKey: "id_ind_contract",
                 }
             )
         individualContract.belongsTo
@@ -62,7 +62,7 @@ module.exports = (sequelize, DataTypes) => {
                 models.PaymentMethod,
                 {
                     as: "individual_contracts_payment",
-                    foreignKey: "id_individual_contract",
+                    foreignKey: "id_individual_contract_payment_method",
                 }
             )
     }
