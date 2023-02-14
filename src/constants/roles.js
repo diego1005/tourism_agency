@@ -1,4 +1,5 @@
 module.exports = {
-    USER_ADMIN_ROLE: "1",
-    USER_STUDENT_ROLE: "2",
-}
+  USER_SUPER: 'super',
+  USER_EDITOR: 'editor',
+  USER_STUDENT: 'student'
+};
