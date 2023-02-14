@@ -1,29 +1,29 @@
-const { Router } = require("express");
+const { Router } = require('express');
 const router = Router();
 
 //controller
-const userController = require("../controllers/userController");
+const userController = require('../controllers/userController');
 
 //middlewares
 //form middlewares
-const { validatesCreateForm, validatesEditForm, validatesChangePass } = require("../middlewares/userFormMiddlewares/validationsFields");
+const { validatesCreateForm, validatesEditForm, validatesChangePass } = require('../middlewares/userFormMiddlewares/validationsFields');
 //user middlewares
-const { userExist, userAlreadyExist, roleUser } = require("../middlewares/userMiddlewares/userMiddlewares");
+const { userExist, userAlreadyExist, roleUser } = require('../middlewares/userMiddlewares/userMiddlewares');
 //auth middlewares
-const { checkToken } = require("../middlewares/authMiddlewares/authMiddlewares");
+const { checkToken, userIsAdmin } = require('../middlewares/authMiddlewares/authMiddlewares');
 
 //user routes
 //read
-router.get("/", userController.get);
-router.get("/:id", checkToken, userExist, userController.getById);
+router.get('/', userIsAdmin, userController.get);
+router.get('/:id', userIsAdmin, userExist, userController.getById);
 //create
-router.post("/add", validatesCreateForm, userAlreadyExist, roleUser, userController.create);
+router.post('/', userIsAdmin, validatesCreateForm, userAlreadyExist, userController.create);
 //update
-router.put("/edit/:id", validatesEditForm, checkToken, userExist, roleUser, userController.edit);
-router.patch("/changePass/:id", validatesChangePass, checkToken, userExist, userController.editPass);
+router.put('/:id', userIsAdmin, validatesEditForm, userExist, userController.edit);
+router.patch('/:id', userIsAdmin, validatesChangePass, userExist, userController.editPass);
 //TODO: FOR IMPLEMENT EVENTLY
 // router.patch("/changeImg/:id", userExist, userController.editImg);
 //delete
-router.delete("/:id", userExist, roleUser, userController.delete);
+router.delete('/:id', userIsAdmin, userExist, userController.delete);
 
 module.exports = router;
