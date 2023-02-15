@@ -1,20 +1,20 @@
 module.exports = (sequelize, DataTypes) => {
-  const travelDestination = sequelize.define(
-    'TravelDestination', //alias
+  const tourPackage = sequelize.define(
+    'TourPackage', //alias
     {
       //table structure
-      destination: {
+      name: {
         type: DataTypes.STRING(45),
         allowNull: false
       },
       description: {
         type: DataTypes.TEXT,
-        allowNull: false
+        allowNull: true
       }
     },
     {
       //configs
-      tablename: 'travel_destinations',
+      tablename: 'tour_package',
       Timestamps: true,
       createdAt: 'created_at',
       updatedAt: 'updated_at',
@@ -22,12 +22,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  travelDestination.associate = (models) => {
-    travelDestination.hasMany(models.GeneralContract, {
+  tourPackage.associate = (models) => {
+    /* tourPackage.hasMany(models.GeneralContract, {
       as: 'general_contracts', //relation name
-      foreignKey: 'id_travel_destination'
-    });
+      foreignKey: 'id_tour_package'
+    }); */
   };
 
-  return travelDestination;
+  return tourPackage;
 };

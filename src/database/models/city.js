@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-  const province = sequelize.define(
-    'Province', //alias
+  const city = sequelize.define(
+    'City', //alias
     {
       //table structure
       name: {
@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       //configs
-      tablename: 'provinces',
+      tablename: 'cities',
       Timestamps: true,
       createdAt: 'created_at',
       updatedAt: 'updated_at',
@@ -18,12 +18,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  province.associate = (models) => {
-    province.hasMany(models.City, {
-      as: 'cities', //relation name
+  city.associate = (models) => {
+    city.belongsTo(models.Province, {
+      as: 'province',
       foreignKey: 'id_province'
     });
   };
 
-  return province;
+  return city;
 };

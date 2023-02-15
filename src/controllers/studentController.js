@@ -1,4 +1,4 @@
-const { TravelDestination } = require('../database/models');
+const { TourPackage } = require('../database/models');
 
 module.exports = {
   getStudents: (req, res) => {},
