@@ -15,12 +15,6 @@ module.exports = {
         description: 'editor user',
         created_at: new Date(),
         updated_at: new Date()
-      },
-      {
-        name: 'student',
-        description: 'student  user',
-        created_at: new Date(),
-        updated_at: new Date()
       }
     ]);
   },

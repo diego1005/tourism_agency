@@ -103,3 +103,7 @@ CREATE TABLE responsible_senior (
     id_responsible_general_contract INT NOT NULL,
     FOREIGN KEY id_responsible_general_contract REFERENCES responsible_general_contracts(id)
 );
+CREATE TABLE provinces (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(45) NOT NULL,
+);

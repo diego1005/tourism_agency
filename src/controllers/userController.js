@@ -48,8 +48,7 @@ module.exports = {
         const hashPassword = await bcrypt.hash(password);
         const newUser = await User.create({
           ...user,
-          password: hashPassword,
-          id_role: 2 // ROL EDITOR
+          password: hashPassword
         });
         res.status(200).json({
           msg: 'user created successfully',
@@ -81,8 +80,10 @@ module.exports = {
       //validations without errors
       try {
         const user = req.body;
+        console.log(req.body);
         const { id } = req.params;
-        const updatedUser = await User.update({ ...user }, { where: { id } });
+        const hasshedPassword = await bcrypt.hash(req.body.password);
+        const updatedUser = await User.update({ ...user, password: hasshedPassword }, { where: { id } });
         res.status(200).json({
           msg: 'user updated successfully',
           data: updatedUser,
