@@ -1,4 +1,4 @@
-const { Router } = require("express");
+const { Router } = require('express');
 const router = Router();
 
 //rutes files
@@ -10,7 +10,7 @@ const genContractRoutes = require('./contracts/general.routes');
 const { userIsAdmin } = require('../middlewares/authMiddlewares/authMiddlewares');
 
 //routes
-router.use("/individual", userIsAdmin, indContractRoutes);
-router.use("/general", userIsAdmin, genContractRoutes);
+router.use('/individuals', userIsAdmin, indContractRoutes);
+router.use('/generals', userIsAdmin, genContractRoutes);
 
 module.exports = router;
