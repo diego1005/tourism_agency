@@ -2,38 +2,37 @@ const { Router } = require('express');
 const router = Router();
 
 //routes files
-const userRoutes = require('./user.routes');
 const authRoutes = require('./auth.routes');
 const roleRoutes = require('./role.routes');
+const userRoutes = require('./user.routes');
 const provinceRoutes = require('./provinces.routes');
 
-const paymentRoutes = require('./payment.routes');
 const cityRoutes = require('./city.routes');
-const destinationRoutes = require('./destination.routes');
+const paymentRoutes = require('./payment.routes');
+const tourPackages = require('./tourPackages.routes');
 const contractRoutes = require('./provinces.routes');
 const responsibleRoutes = require('./responsible.routes');
 const studentsRoutes = require('./student.routes');
 
-//routes
+//ESTO ESTÁ FUNCIONANDO (necesita refactorización, pero no es urgente)
 router.use('/auth', authRoutes);
-router.use('/users', userRoutes);
 router.use('/roles', roleRoutes);
-router.use('/provinces', provinceRoutes);
+router.use('/users', userRoutes);
+router.use('/provinces', provinceRoutes); // NO SÉ si SERÁ NECESARIO
+
+//ESTO ESTÁ FUNCIONANDO, pero no tiene armados los CRUDs (urgencia media)
+router.use('/cities', cityRoutes); // NO SÉ si SERÁ NECESARIO
+router.use('/responsible', responsibleRoutes);
+router.use('/students', studentsRoutes);
 
 // URGENTE!!!
 // NECESITO LOS MODELOS Y LAS RELACIONES FUNCIONANDO.
-// CREAR EL MODELO CITY (PARA USARSE EN DISTINATION, STUDENT, RESPONSILBE, ETC.)
 // TENER EN CUENTA QUE ESTÁ CREADO EL MODELO "PROVINCE" (PARA USAR EN LOS DESTINOS POR EJEMPLO...)
-// LOS "RESPONSIBLE" YA NO SERÁ "USERS", TIENE QUE SER OTRO MODELO APARTE CON: firstname, lastname, document, birthdate(de tipo fecha), city, address, phone, postalcode, info(de tipo text)
-// LOS "STUDENTES" YA NO SERÁ "USERS", TIENE QUE SER OTRO MODELO APARTE CON: firstname, lastname, document, birthdate(de tipo fecha), city, address, postalcode, info(de tipo text)
 // CREAR LAS MIGRACIONES Y LOS SEEDES CON AL MENOS DOS DATOS EN CASO DE QUE NO EXISTAN
-
 // ********** ESTAS TIENE QUE SER LAS RUTAS, LOS ACHIVOS DE RUTAS ESTÁN CREADOS. LOS CONTROLADORES ESTÁN CREADOS PERO VACÍOS.
-router.use('/payment', paymentRoutes);
-router.use('/cities', cityRoutes);
-router.use('/destination', destinationRoutes);
-router.use('/contracts', contractRoutes);
-router.use('/responsible', responsibleRoutes);
-router.use('/students', studentsRoutes);
+router.use('/payment', paymentRoutes); // medios de pago (solo agrergar 2)
+router.use('/tour-packages', tourPackages); //paquetes de viaje (ej: "Cataratas 5 días" ó "Cataratas 10 días")
+router.use('/contracts', contractRoutes); // no tengo ni idea qué es esto
+// Y TODO LO DEM'AS QUE FALTA QUE FALTA
 
 module.exports = router;

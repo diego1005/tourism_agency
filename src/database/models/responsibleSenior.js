@@ -1,51 +1,69 @@
 module.exports = (sequelize, DataTypes) => {
-    const responsibleSenior = sequelize.define(
-        "ResponsibleSenior", //alias
-        {   //table structure
-            dni: {
-                type: DataTypes.STRING(11),
-                allowNull: false,
-            },
-            name: {
-                type: DataTypes.STRING(45),
-                allowNull: false,
-            },
-            lastname: {
-                type: DataTypes.STRING(45),
-                allowNull: false,
-            },
-            email: {
-                type: DataTypes.STRING(45),
-                allowNull: false,
-            },
-            birth_date: {
-                type: DataTypes.DATE,
-                allowNull: false,
-            },
-            phone: {
-                type: DataTypes.STRING(12),
-                allowNull: false,
-            }
-        },
-        {   //configs
-            tablename: "resposible_senior",
-            Timestamps: true,
-            createdAt: "created_at",
-            updatedAt: "updated_at",
-            deletedAt: false,
-        },
-    )
-
-    responsibleSenior.associate = (models) => {
-        responsibleSenior.belongsToMany
-            (
-                models.GeneralContract,
-                {
-                    through: "responsible_general_contracts",  //relation name
-                    foreignKey: "id_responsible_general_contracts"
-                }
-            )
+  const responsibleSenior = sequelize.define(
+    'ResponsibleSenior', //alias
+    {
+      //table structure
+      firstname: {
+        type: DataTypes.STRING(45),
+        allowNull: false
+      },
+      lastname: {
+        type: DataTypes.STRING(45),
+        allowNull: false
+      },
+      document: {
+        type: DataTypes.STRING(11),
+        allowNull: false
+      },
+      birthdate: {
+        type: DataTypes.DATE,
+        allowNull: false
+      },
+      email: {
+        type: DataTypes.STRING(45),
+        allowNull: false
+      },
+      phone: {
+        type: DataTypes.STRING(14),
+        allowNull: false
+      },
+      address: {
+        type: DataTypes.STRING(45),
+        allowNull: false
+      },
+      city: {
+        type: DataTypes.STRING(45),
+        allowNull: false
+      },
+      province: {
+        type: DataTypes.STRING(45),
+        allowNull: false
+      },
+      postalcode: {
+        type: DataTypes.STRING(8),
+        allowNull: false
+      },
+      info: {
+        type: DataTypes.TEXT,
+        allowNull: true
+      }
+    },
+    {
+      //configs
+      tablename: 'resposible_senior',
+      Timestamps: true,
+      createdAt: 'created_at',
+      updatedAt: 'updated_at',
+      deletedAt: false
     }
+  );
 
-    return responsibleSenior;
-}
+  responsibleSenior.associate = (models) => {
+    responsibleSenior.hasMany(models.Student, {
+      as: 'students', //relation name
+      foreignKey: 'id_responsible_senior'
+    });
+  };
+
+  return responsibleSenior;
+};

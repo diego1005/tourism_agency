@@ -32,17 +32,17 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   user.associate = (models) => {
-    user.hasOne(models.Student, {
+    /* user.hasOne(models.Student, {
       foreignKey: 'id_user'
     });
     user.hasMany(models.IndividualContract, {
       as: 'individual_contracts', //relation name
       foreignKey: 'id_user'
-    }),
-      user.belongsTo(models.Role, {
-        as: 'role',
-        foreignKey: 'id_role'
-      });
+    }), */
+    user.belongsTo(models.Role, {
+      as: 'role',
+      foreignKey: 'id_role'
+    });
   };
 
   return user;

@@ -1,11 +1,11 @@
-const { TravelDestination } = require('../database/models');
+const { TourPackage } = require('../database/models');
 
 module.exports = {
   getDestinations: async (req, res) => {
     try {
-      const destinationList = await TravelDestination.findAll();
+      const tourPackage = await TourPackage.findAll();
       res.status(200).json({
-        data: destinationList,
+        data: tourPackage,
         status: 'success'
       });
     } catch (error) {
@@ -18,7 +18,7 @@ module.exports = {
   },
   destinationCreate: async (req, res) => {
     try {
-      await TravelDestination.create(req.body);
+      await TourPackage.create(req.body);
       res.status(200).json({
         msg: 'destination created successfully',
         status: 'success'
