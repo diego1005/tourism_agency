@@ -18,10 +18,10 @@ const studentsRoutes = require('./student.routes');
 router.use('/auth', authRoutes);
 router.use('/roles', roleRoutes);
 router.use('/users', userRoutes);
-router.use('/provinces', provinceRoutes); // NO SÉ si SERÁ NECESARIO
+router.use('/provinces', provinceRoutes); // NO SÉ SI SERÁ NECESARIO
 
 //ESTO ESTÁ FUNCIONANDO, pero no tiene armados los CRUDs (urgencia media)
-router.use('/cities', cityRoutes); // NO SÉ si SERÁ NECESARIO
+router.use('/cities', cityRoutes); // NO SÉ SI SERÁ NECESARIO
 router.use('/responsible', responsibleRoutes);
 router.use('/students', studentsRoutes);
 

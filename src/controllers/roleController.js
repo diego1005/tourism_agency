@@ -1,15 +1,13 @@
-const { User, Role } = require('../database/models');
+const { Role } = require('../database/models');
 
 module.exports = {
   get: async (req, res) => {
     try {
-      const listUsersWithRoles = await User.findAll({
-        attributes: ['name', 'lastname', 'email', 'id_role']
-      });
+      const roles = await Role.findAll();
       res.status(200).json({
-        count: listUsersWithRoles.length,
-        data: listUsersWithRoles,
-        status: 'success'
+        status: 'success',
+        count: roles.length,
+        data: roles
       });
     } catch (error) {
       res.status(409).json({
