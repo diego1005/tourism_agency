@@ -1,4 +1,4 @@
-const { Role, User } = require('../../database/models');
+const { Rol, Usuario } = require('../../database/models');
 const { Op } = require('sequelize');
 const { USER_SUPER, USER_EDITOR, USER_STUDENT } = require('../../constants/roles');
 
@@ -6,22 +6,22 @@ module.exports = {
   //Checks if user exist in the database, for bringing it
   userExist: async (req, res, next) => {
     try {
-      const param = req.params.id || req.body.username;
-      const { dataValues: user } = (await User.findOne({
+      const param = req.params.id || req.body.email;
+      const { dataValues: user } = (await Usuario.findOne({
         where: {
           [Op.or]: [{ id: param }, { email: param }]
         },
         include: [
           {
-            model: Role,
-            as: 'role'
+            model: Rol,
+            as: 'rol'
           }
         ]
       })) || { dataValues: null };
       if (!user) {
         return res.status(404).json({
           status: 'not found',
-          msg: "User doesn't exist"
+          msg: "El usuario no existe"
         });
       } else {
         req.user = user;
@@ -30,7 +30,7 @@ module.exports = {
     } catch (error) {
       res.status(409).json({
         status: 'error',
-        msg: 'An error has ocurred on userExist'
+        msg: 'Ha ocurrido un error al intentar verificar el usuario'
       });
     }
   },
@@ -38,21 +38,21 @@ module.exports = {
   userAlreadyExist: async (req, res, next) => {
     try {
       const { email } = req.body;
-      const { dataValues: user } = (await User.findOne({ where: { email } })) || { dataValues: null };
+      const { dataValues: user } = (await Usuario.findOne({ where: { email } })) || { dataValues: null };
       if (!user) {
         next();
       } else {
         //TODO: delete avatar img uploaded ?
         res.status(409).json({
           staus: 'denied',
-          msg: 'invalid or existing username',
+          msg: 'El usuario ya existe o es invalido',
           returnData: req.body
         });
       }
     } catch (error) {
       res.status(409).json({
         status: 'error',
-        msg: 'An error has ocurred on userAlreadyExist'
+        msg: 'Ha ocurido un error al intentar verificar el usuario'
       });
     }
   },

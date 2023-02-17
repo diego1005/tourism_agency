@@ -1,22 +1,22 @@
-const { IndividualContract } = require('../../database/models');
+const { ContratoIndividual } = require('../../database/models');
 const { Op } = require('sequelize');
 
 module.exports = {
     //Checks if contract exist in the database, for bringing it
     individualContractExist: async (req, res, next) => {
         try {
-            const { param } = req.params.id || req.params.dni;
-            const { dataValues: contract } = await IndividualContract.findOne({
+            const { param } = req.params.id || req.params.documento;
+            const { dataValues: contract } = await ContratoIndividual.findOne({
                 where: {
                     [Op.or]: [
                         { id: param },
-                        { dni: param },
+                        { documento: param },
                     ]
                 }
             }) || { dataValues: null };
             if (!contract) {
                 res.status(404).json({
-                    msg: "Contract doesn't exist",
+                    msg: "El contrato individual no existe",
                     status: "not found",
                 });
             } else {
@@ -25,7 +25,7 @@ module.exports = {
             }
         } catch (error) {
             res.status(409).json({
-                msg: "An error has ocurred trying to bring the contract",
+                msg: "Ha ocurrido un error al intentar traer el contrato individual",
                 error,
                 status: "error",
             });
@@ -34,17 +34,17 @@ module.exports = {
     //generates contract number
     contractNumber: async (req, res, next) => {
         try {
-            const lastNumber = await IndividualContract.findAll({
+            const lastNumber = await ContratoIndividual.findAll({
                 attributes: ["id"],
                 order: [
-                    ['nro_contract', 'DESC']
+                    ['cod_contrato', 'DESC']
                 ],
                 limit: 1
             });
             console.log(lastNumber);
         } catch (error) {
             res.status(409).json({
-                msg: "An error has ocurred trying to bring last contract number",
+                msg: "Ha ocurrido un error al intentar traer el ultimo codigo de contrato individual",
                 status: "error",
             });
         }

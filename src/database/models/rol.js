@@ -1,13 +1,13 @@
 module.exports = (sequelize, DataTypes) => {
-  const role = sequelize.define(
-    'Role', //alias
+  const rol = sequelize.define(
+    'Rol', //alias
     {
       //table structure
-      name: {
+      rol: {
         type: DataTypes.STRING(25),
         allowNull: false
       },
-      description: {
+      descripcion: {
         type: DataTypes.TEXT,
         allowNull: false
       }
@@ -22,12 +22,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  role.associate = (models) => {
-    role.hasMany(models.User, {
-      as: 'users', //relation name
-      foreignKey: 'id_role'
+  rol.associate = (models) => {
+    rol.hasMany(models.Usuario, {
+      as: 'usuarios', //relation name
+      foreignKey: 'id_rol'
     });
   };
 
-  return role;
+  return rol;
 };

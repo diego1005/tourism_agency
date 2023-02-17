@@ -20,7 +20,7 @@ module.exports = {
     const token = req.headers['authorization'];
     if (!token) {
       return res.status(403).json({
-        msg: 'Access denied. You need to send a valid token',
+        msg: 'Acceso denegado. Debes enviar un token valido',
         status: 'unauthorized'
       });
     }
@@ -28,7 +28,7 @@ module.exports = {
     const decoded = jwt.decode(token.split('Bearer ')[1]);
     if (decoded.role.name !== 'super') {
       res.status(401).json({
-        msg: 'Access denied',
+        msg: 'Acceso denegado',
         status: 'unauthorized'
       });
     } else {

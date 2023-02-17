@@ -1,16 +1,16 @@
 const { validationResult } = require('express-validator');
-const { User, Role } = require('../database/models');
+const { Usuario, Rol } = require('../database/models');
 const bcrypt = require('../helpers/bcrypt');
 
 module.exports = {
   get: async (req, res) => {
     try {
-      const listUsers = await User.findAll({
+      const listUsers = await Usuario.findAll({
         attributes: { exclude: ['password'] },
         include: [
           {
-            model: Role,
-            as: 'role'
+            model: Rol,
+            as: 'rol'
           }
         ]
       });
@@ -22,7 +22,7 @@ module.exports = {
     } catch (error) {
       //TODO: Create a helper endpoint error respons
       res.status(409).json({
-        msg: 'An error has ocurred trying to bring the users',
+        msg: 'Ha ocurrido un error al intentar traer los usuarios',
         error,
         status: 'error'
       });
@@ -30,7 +30,7 @@ module.exports = {
   },
   getById: (req, res) => {
     res.status(200).json({
-      msg: 'user found',
+      msg: 'Usuario encontrado',
       data: req.user,
       token: req.token,
       status: 'success'
@@ -46,18 +46,18 @@ module.exports = {
         const user = req.body;
         const { password } = user;
         const hashPassword = await bcrypt.hash(password);
-        const newUser = await User.create({
+        const newUser = await Usuario.create({
           ...user,
           password: hashPassword
         });
         res.status(200).json({
-          msg: 'user created successfully',
+          msg: 'Usuario creado con exito',
           status: 'success'
         });
       } catch (error) {
         //TODO: delete avatar img uploaded
         res.status(409).json({
-          msg: 'An error has ocurred trying to create the user',
+          msg: 'Ha ocurrido un error al intentar crear el usuario',
           error,
           status: 'error'
         });
@@ -66,7 +66,7 @@ module.exports = {
       //validations with errors
       //TODO: delete avatar img uploaded
       res.status(400).json({
-        msg: 'the form has input errors',
+        msg: 'El formulario tiene errores en los campos',
         error: errors,
         returnData: req.body,
         status: 'bad request'
@@ -83,9 +83,9 @@ module.exports = {
         console.log(req.body);
         const { id } = req.params;
         const hasshedPassword = await bcrypt.hash(req.body.password);
-        const updatedUser = await User.update({ ...user, password: hasshedPassword }, { where: { id } });
+        const updatedUser = await Usuario.update({ ...user, password: hasshedPassword }, { where: { id } });
         res.status(200).json({
-          msg: 'user updated successfully',
+          msg: 'Usuario editado con exito',
           data: updatedUser,
           status: 'success'
         });
@@ -93,7 +93,7 @@ module.exports = {
         console.log(error);
         //TODO: delete avatar img uploaded
         res.status(409).json({
-          msg: 'An error has ocurred trying to edit the user',
+          msg: 'Ha ocurrido un error al intentar editar el usuario',
           error,
           status: 'error'
         });
@@ -102,7 +102,7 @@ module.exports = {
       //validations with errors
       //TODO: delete avatar img uploaded
       res.status(400).json({
-        msg: 'the form has input errors',
+        msg: 'El formulario tiene errores en los campos',
         error: errors,
         returnData: req.body,
         status: 'bad request'
@@ -117,7 +117,7 @@ module.exports = {
       try {
         const { id } = req.params;
         const { password } = req.body;
-        await User.update(
+        await Usuario.update(
           {
             password: await bcrypt.hash(password)
           },
@@ -127,20 +127,20 @@ module.exports = {
         );
         res.status(200).json({
           status: 'success',
-          msg: 'Passwod changed successfully'
+          msg: 'La contraseña se cambio con exito'
         });
       } catch (error) {
         console.log(error);
         res.status(409).json({
           status: 'error',
-          msg: "An error has ocurred trying to change the user's password",
+          msg: "Ha ocurrido un error al intentar cambiar la contraseña",
           error
         });
       }
     } else {
       res.status(400).json({
         status: 'bad request',
-        msg: 'the form has input errors',
+        msg: 'El formulario tiene errores en los campos',
         error: errors,
         returnData: req.body
       });
@@ -155,14 +155,14 @@ module.exports = {
   delete: async (req, res) => {
     try {
       const { id } = req.params;
-      const deletedUser = await User.destroy({ where: { id } });
+      const deletedUser = await Usuario.destroy({ where: { id } });
       res.status(200).json({
-        msg: 'user deleted successfully',
+        msg: 'Usuario borrado con exito',
         status: 'success'
       });
     } catch (error) {
       res.status(409).json({
-        msg: 'An error has ocurred trying to delete the user',
+        msg: 'Ha ocurrido un error al intentar borrar el usuario',
         error,
         status: 'error'
       });

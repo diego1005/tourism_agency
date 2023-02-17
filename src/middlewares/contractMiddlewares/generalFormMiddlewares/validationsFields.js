@@ -4,23 +4,25 @@ const path = require("path");
 const validates = {
     //create general contracts validations
     validatesCreateForm: [
-        check("indicated_date").notEmpty().withMessage("This field is required"),
-        check("indicated_value").notEmpty().withMessage("This field is required"),
-        check("travel_date").notEmpty().withMessage("This field is required"),
-        check("travel_destination").notEmpty().withMessage("This field is required"),
-        check("state").notEmpty().withMessage("This field is required"),
-        check("nro_individual").notEmpty().withMessage("This field is required"),
-        check("responsible").notEmpty().withMessage("This field is required"),
+        check("fecha_contrato").notEmpty().withMessage("Este campo es requerido"),
+        check("valor_contrato").notEmpty().withMessage("Este campo es requerido"),
+        check("descripcion").notEmpty().withMessage("Este campo es requerido"),
+        check("fecha_viaje").notEmpty().withMessage("Este campo es requerido"),
+        check("cupo_pasajeros").notEmpty().withMessage("Este campo es requerido"),
+        check("grado").notEmpty().withMessage("Este campo es requerido"),
+        check("division").notEmpty().withMessage("Este campo es requerido"),
+        check("turno").notEmpty().withMessage("Este campo es requerido"),
     ],
     //Edit general contracts validations
     validatesEditForm: [
-        check("indicated_date").notEmpty().withMessage("This field is required"),
-        check("indicated_value").notEmpty().withMessage("This field is required"),
-        check("travel_date").notEmpty().withMessage("This field is required"),
-        check("travel_destination").notEmpty().withMessage("This field is required"),
-        check("state").notEmpty().withMessage("This field is required"),
-        check("nro_individual").notEmpty().withMessage("This field is required"),
-        check("responsible").notEmpty().withMessage("This field is required"),
+        check("fecha_contrato").notEmpty().withMessage("Este campo es requerido"),
+        check("valor_contrato").notEmpty().withMessage("Este campo es requerido"),
+        check("descripcion").notEmpty().withMessage("Este campo es requerido"),
+        check("fecha_viaje").notEmpty().withMessage("Este campo es requerido"),
+        check("cupo_pasajeros").notEmpty().withMessage("Este campo es requerido"),
+        check("grado").notEmpty().withMessage("Este campo es requerido"),
+        check("division").notEmpty().withMessage("Este campo es requerido"),
+        check("turno").notEmpty().withMessage("Este campo es requerido"),
     ],
 }
 

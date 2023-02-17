@@ -1,9 +1,9 @@
-const { Role } = require('../database/models');
+const { Rol } = require('../database/models');
 
 module.exports = {
   get: async (req, res) => {
     try {
-      const roles = await Role.findAll();
+      const roles = await Rol.findAll();
       res.status(200).json({
         status: 'success',
         count: roles.length,
@@ -11,7 +11,7 @@ module.exports = {
       });
     } catch (error) {
       res.status(409).json({
-        msg: 'An error has ocurred trying to bring the users',
+        msg: 'Ha ocurrido un error al intentar traer los roles',
         error,
         status: 'error'
       });
@@ -19,19 +19,19 @@ module.exports = {
   },
   create: async (req, res) => {
     try {
-      const { name, description } = req.body;
-      const { dataValues: newRole } = await Role.create({
-        name,
-        description
+      const { rol, descripcion } = req.body;
+      const { dataValues: newRole } = await Rol.create({
+        rol,
+        descripcion
       });
       res.status(200).json({
-        msg: 'role created successfully',
+        msg: 'Rol creado con exito',
         data: newRole,
         status: 'success'
       });
     } catch (error) {
       res.status(409).json({
-        msg: 'An error has ocurred trying to create the role',
+        msg: 'Ha ocurrido un error al intentar crear el rol',
         error,
         status: 'error'
       });
@@ -40,14 +40,14 @@ module.exports = {
   delete: async (req, res) => {
     try {
       const { id } = req.params;
-      await Role.destroy({ where: { id } });
+      await Rol.destroy({ where: { id } });
       res.status(200).json({
-        msg: 'role deleted successfully',
+        msg: 'Rol borrado con exito',
         status: 'success'
       });
     } catch (error) {
       res.status(409).json({
-        msg: 'An error has ocurred trying to delete the role',
+        msg: 'Ha ocurrido un error al intentar borar el rol',
         error,
         status: 'error'
       });

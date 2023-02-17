@@ -1,40 +1,32 @@
 module.exports = (sequelize, DataTypes) => {
-  const student = sequelize.define(
-    'Student', //alias
+  const pasajero = sequelize.define(
+    'Pasajero', //alias
     {
       //table structure
-      firstname: {
+      nombre: {
         type: DataTypes.STRING(45),
         allowNull: false
       },
-      lastname: {
+      apellido: {
         type: DataTypes.STRING(45),
         allowNull: false
       },
-      document: {
+      documento: {
         type: DataTypes.STRING(11),
         allowNull: false
       },
-      birthdate: {
+      fecha_nac: {
         type: DataTypes.DATE,
         allowNull: false
       },
-      phone: {
-        type: DataTypes.STRING(12),
-        allowNull: true
-      },
-      email: {
-        type: DataTypes.STRING(12),
-        allowNull: true
-      },
-      info: {
+      obs_medicas: {
         type: DataTypes.TEXT,
         allowNull: true
       }
     },
     {
       //configs
-      tablename: 'students',
+      tablename: 'pasajeros',
       Timestamps: true,
       createdAt: 'created_at',
       updatedAt: 'updated_at',
@@ -42,12 +34,16 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  student.associate = (models) => {
-    student.belongsTo(models.ResponsibleSenior, {
-      as: 'responsible_senior',
-      foreignKey: 'id_responsible_senior'
+  pasajero.associate = (models) => {
+    pasajero.belongsTo(models.Responsable, {
+      as: 'responsable',
+      foreignKey: 'id_responsable'
+    });
+    pasajero.hasMany(models.ContratoIndividual, {
+      as: 'contratos_individuales',
+      foreignKey: 'id_contrato_individual'
     });
   };
 
-  return student;
+  return pasajero;
 };

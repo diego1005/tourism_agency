@@ -1,13 +1,13 @@
 module.exports = (sequelize, DataTypes) => {
-  const user = sequelize.define(
-    'User', //alias
+  const usuario = sequelize.define(
+    'Usuario', //alias
     {
       //table structure
-      firstname: {
+      nombre: {
         type: DataTypes.STRING(45),
         allowNull: false
       },
-      lastname: {
+      apellido: {
         type: DataTypes.STRING(45),
         allowNull: false
       },
@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       //configs
-      tablename: 'users',
+      tablename: 'usuarios',
       Timestamps: true,
       createdAt: 'created_at',
       updatedAt: 'updated_at',
@@ -31,19 +31,19 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  user.associate = (models) => {
-    /* user.hasOne(models.Student, {
-      foreignKey: 'id_user'
+  usuario.associate = (models) => {
+    /* usuario.hasOne(models.Student, {
+      foreignKey: 'id_usuario'
     });
-    user.hasMany(models.IndividualContract, {
+    usuario.hasMany(models.IndividualContract, {
       as: 'individual_contracts', //relation name
-      foreignKey: 'id_user'
+      foreignKey: 'id_usuario'
     }), */
-    user.belongsTo(models.Role, {
-      as: 'role',
-      foreignKey: 'id_role'
+    usuario.belongsTo(models.Rol, {
+      as: 'rol',
+      foreignKey: 'id_rol'
     });
   };
 
-  return user;
+  return usuario;
 };

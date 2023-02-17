@@ -1,21 +1,21 @@
 module.exports = (sequelize, DataTypes) => {
-  const responsibleSenior = sequelize.define(
-    'ResponsibleSenior', //alias
+  const responsable = sequelize.define(
+    'Responsable', //alias
     {
       //table structure
-      firstname: {
+      nombre: {
         type: DataTypes.STRING(45),
         allowNull: false
       },
-      lastname: {
+      apellido: {
         type: DataTypes.STRING(45),
         allowNull: false
       },
-      document: {
+      documento: {
         type: DataTypes.STRING(11),
         allowNull: false
       },
-      birthdate: {
+      fecha_nac: {
         type: DataTypes.DATE,
         allowNull: false
       },
@@ -23,23 +23,23 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(45),
         allowNull: false
       },
-      phone: {
+      telefono: {
         type: DataTypes.STRING(14),
         allowNull: false
       },
-      address: {
+      direccion: {
         type: DataTypes.STRING(45),
         allowNull: false
       },
-      city: {
+      ciudad: {
         type: DataTypes.STRING(45),
         allowNull: false
       },
-      province: {
+      provincia: {
         type: DataTypes.STRING(45),
         allowNull: false
       },
-      postalcode: {
+      codigo_postal: {
         type: DataTypes.STRING(8),
         allowNull: false
       },
@@ -50,7 +50,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       //configs
-      tablename: 'resposible_senior',
+      tablename: 'responsables',
       Timestamps: true,
       createdAt: 'created_at',
       updatedAt: 'updated_at',
@@ -58,12 +58,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  responsibleSenior.associate = (models) => {
-    responsibleSenior.hasMany(models.Student, {
-      as: 'students', //relation name
-      foreignKey: 'id_responsible_senior'
+  responsable.associate = (models) => {
+    responsable.hasMany(models.Pasajero, {
+      as: 'pasajeros', //relation name
+      foreignKey: 'id_responsable'
     });
   };
 
-  return responsibleSenior;
+  return responsable;
 };

@@ -1,24 +1,25 @@
-const { GeneralContract } = require('../../database/models');
+const { ContratoGeneral } = require('../../database/models');
 
 module.exports = {
     get: async (req, res) => {
         try {
-            const generalList = await GeneralContract.findAll();
-            if (generalList) {
+            const generalContractList = await ContratoGeneral.findAll();
+            if (generalContractList) {
                 res.status(200).json({
-                    data: generalList,
+                    count: generalContractList.length,
+                    data: generalContractList,
                     status: "success",
                 })
             } else {
                 res.status(404).json({
-                    msg: "There are no contracts yet",
+                    msg: "Aun no hay contratos cargados",
                     status: "not found",
                 });
             }
         } catch (error) {
             console.log(error);
             res.status(400).json({
-                msg: "An error has ocurred when trying to bring General Contracts",
+                msg: "Ha ocurrido un error al intentar traer los contratos generales",
                 status: "denied",
             })
         }

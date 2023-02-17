@@ -1,33 +1,26 @@
 const { validationResult } = require("express-validator");
-const { Contract, IndividualContract, StateContract } = require('../../database/models');
+const { ContratoIndividual } = require('../../database/models');
 
 module.exports = {
     get: async (req, res) => {
         try {
-            const listOfContracts = await IndividualContract.findAll(
-                {
-                    include: [
-                        { model: Contract, as: "contract" },
-                        { model: StateContract, as: "state_individual_contracts" }
-                    ]
-                }
-            );
-            if (listOfContracts) {
+            const individualContractsList = await ContratoIndividual.findAll();
+            if (individualContractsList) {
                 res.status(200).json({
-                    count: listOfContracts.length,
-                    data: listOfContracts,
+                    count: individualContractsList.length,
+                    data: individualContractsList,
                     status: "success",
                 });
             } else {
                 res.status(404).json({
-                    msg: "There are no contracts yet",
+                    msg: "Aun no hay contratos cargados",
                     status: "not found",
                 });
             }
         } catch (error) {
             console.log(error);
             res.status(409).json({
-                msg: "An error has ocurred trying to bring the contracts",
+                msg: "Ha ocurrido un error al intentar traer los contratos",
                 error,
                 status: "error",
             });
@@ -35,7 +28,7 @@ module.exports = {
     },
     getByDni: (req, res) => {
         res.status(200).json({
-            msg: "contract found",
+            msg: "Contrato encontrado",
             data: req.contract,
             status: "success",
         });
@@ -54,7 +47,7 @@ module.exports = {
         } else {
             //validations with errors
             res.status(400).json({
-                msg: "the form has input errors",
+                msg: "El formulario tiene errores en los campos",
                 error: errors,
                 returnData: req.body,
                 status: "bad request",

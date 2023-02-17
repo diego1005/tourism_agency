@@ -1,16 +1,16 @@
-const { GeneralContract } = require('../../database/models');
+const { ContratoGeneral } = require('../../database/models');
 
 module.exports = {
     //Checks if contract exist in the database, for bringing it
     generalContractExist: async (req, res, next) => {
         try {
             const { id } = req.params;
-            const { dataValues: contract } = await GeneralContract.findOne({
+            const { dataValues: contract } = await ContratoGeneral.findOne({
                 where: { id }
             }) || { dataValues: null };
             if (!contract) {
                 return res.status(404).json({
-                    msg: "Contract doesn't exist",
+                    msg: "El contrato general no existe",
                     status: "not found",
                 });
             } else {
@@ -19,7 +19,7 @@ module.exports = {
             }
         } catch (error) {
             res.status(409).json({
-                msg: "An error has ocurred trying to bring the contract",
+                msg: "Ha ocurrido un error al intentar traer el contrato general",
                 error,
                 status: "error",
             });
@@ -28,17 +28,17 @@ module.exports = {
     //generates contract number
     contractNumber: async (req, res, next) => {
         try {
-            const lastNumber = await GeneralContract.findAll({
+            const lastNumber = await ContratoGeneral.findAll({
                 attributes: ["id"],
                 order: [
-                    ['nro_contract', 'DESC']
+                    ['cod_contrato', 'DESC']
                 ],
                 limit: 1
             });
             console.log(lastNumber);
         } catch (error) {
             res.status(409).json({
-                msg: "An error has ocurred trying to bring last contract number",
+                msg: "Ha ocurrido un error al intentar traer el ultimo codigo de contrato general",
                 status: "error",
             });
         }

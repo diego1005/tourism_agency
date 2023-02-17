@@ -15,17 +15,17 @@ module.exports = {
         if (!auth) {
           res.status(401).json({
             status: 'Unauthorized',
-            msg: "Password doesn't match"
+            msg: "Las contraseñas no coinciden"
           });
         } else {
           //creates security token
           const { user } = req;
-          const { password, id_role, ...rest } = user;
+          const { password, id_rol, ...rest } = user;
           console.log(rest);
           const token = jwt.sign(rest);
           res.status(200).json({
             status: 'success',
-            msq: 'user logged in successfully',
+            msq: 'usuario logueado con exito',
             user: rest,
             token
           });
@@ -33,14 +33,14 @@ module.exports = {
       } catch (error) {
         res.status(409).json({
           status: 'error',
-          msg: 'An error has ocurred trying to log in',
+          msg: 'Ha ocurrido un error al intentar loguear al usuario',
           error
         });
       }
     } else {
       //validations with errors
       res.status(400).json({
-        msg: 'the form has input errors',
+        msg: 'El formulario tiene errores en los campos',
         error: errors,
         returnData: req.body,
         status: 'bad request'
@@ -48,11 +48,11 @@ module.exports = {
     }
   },
   checkToken: (req, res) => {
-    const { firstname, lastname, email, id_role } = req.user;
+    const { nombre, apellido, email, id_rol } = req.user;
     const { token } = req;
     res.status(200).json({
-      msg: 'token is valid',
-      user: { firstname, lastname, email, id_role },
+      msg: 'El token es invalido',
+      user: { nombre, apellido, email, id_rol },
       token: token,
       status: 'success'
     });

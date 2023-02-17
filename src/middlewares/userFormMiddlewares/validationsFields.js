@@ -4,16 +4,16 @@ const path = require('path');
 const validates = {
   //Login validations
   validatesLoginForm: [
-    check('username').notEmpty().withMessage('This field is required').bail().isEmail().withMessage('email invalid'),
-    check('password').notEmpty().withMessage('This field is required')
+    check('email').notEmpty().withMessage('Este campo es requerido').bail().isEmail().withMessage('email invalido'),
+    check('password').notEmpty().withMessage('Este campo es requerido')
   ],
   //Signin validations
   validatesCreateForm: [
-    check('firstname').notEmpty().withMessage('This field is required'),
-    check('lastname').notEmpty().withMessage('This field is required'),
-    check('email').notEmpty().withMessage('This field is required').bail().isEmail().withMessage('email invalid'),
-    check('password').notEmpty().withMessage('This field is required')
-    /* check("confirmPassword").notEmpty().withMessage("This field is required").bail().custom((
+    check('nombre').notEmpty().withMessage('Este campo es requerido'),
+    check('apellido').notEmpty().withMessage('Este campo es requerido'),
+    check('email').notEmpty().withMessage('Este campo es requerido').bail().isEmail().withMessage('email invalido'),
+    check('password').notEmpty().withMessage('Este campo es requerido')
+    /* check("confirmPassword").notEmpty().withMessage("Este campo es requerido").bail().custom((
             confirmPassword, { req }) => {
             if (confirmPassword != req.body.password) {
                 throw new Error("Passwords doesn't match")
@@ -33,11 +33,11 @@ const validates = {
   //Edit validations
   //For common data
   validatesEditForm: [
-    check('firstname').notEmpty().withMessage('This field is required'),
-    check('lastname').notEmpty().withMessage('This field is required'),
-    check('email').notEmpty().withMessage('This field is required').bail().isEmail().withMessage('email invalid'),
-    check('password').notEmpty().withMessage('This field is required'),
-    check('id_role').notEmpty().withMessage('This field is required')
+    check('nombre').notEmpty().withMessage('Este campo es requerido'),
+    check('apellido').notEmpty().withMessage('Este campo es requerido'),
+    check('email').notEmpty().withMessage('Este campo es requerido').bail().isEmail().withMessage('email invalido'),
+    check('password').notEmpty().withMessage('Este campo es requerido'),
+    check('id_rol').notEmpty().withMessage('Este campo es requerido')
   ],
   //For image avatar
   validatesChangeImg: [
@@ -47,10 +47,10 @@ const validates = {
         const extFile = path.extname(req.file.originalname);
         return ext.includes(extFile);
       })
-      .withMessage('This field requires the following extensions .jpg, .png, .jpeg, .webp')
+      .withMessage('Este campo acepta las siguientes extensiones .jpg, .png, .jpeg, .webp')
   ],
   //For password
-  validatesChangePass: [check('password').notEmpty().withMessage('This field is required')]
+  validatesChangePass: [check('password').notEmpty().withMessage('Este campo es requerido')]
 };
 
 module.exports = validates;
