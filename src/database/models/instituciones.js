@@ -32,8 +32,8 @@ module.exports = (sequelize, DataTypes) => {
 
     institucion.associate = (models) => {
         institucion.hasMany(models.ContratoGeneral, {
-            as: 'contratosGenerales', //relation name
-            foreignKey: 'id_contrato_general'
+            as: 'contratos_generales', //relation name
+            foreignKey: 'id_institucion'
         });
     };
 

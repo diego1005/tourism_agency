@@ -41,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
     });
     pasajero.hasMany(models.ContratoIndividual, {
       as: 'contratos_individuales',
-      foreignKey: 'id_contrato_individual'
+      foreignKey: 'id_pasajero'
     });
   };
 

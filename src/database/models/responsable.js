@@ -63,6 +63,10 @@ module.exports = (sequelize, DataTypes) => {
       as: 'pasajeros', //relation name
       foreignKey: 'id_responsable'
     });
+    responsable.belongsToMany(models.ContratoGeneral, {
+      through: 'responsables_contratos_generales', //relation name
+      foreignKey: 'id_responsable',
+    });
   };
 
   return responsable;
