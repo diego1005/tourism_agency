@@ -16,7 +16,7 @@ router.use('/roles', roleRoutes);
 router.use('/users', userRoutes);
 
 //ESTO ESTÁ FUNCIONANDO, pero no tiene armados los CRUDs (urgencia media)
-router.use('/responsible', responsibleRoutes);
+router.use('/responsibles', responsibleRoutes);
 router.use('/passenger', passengerRoutes);
 
 // URGENTE!!!

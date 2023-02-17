@@ -5,11 +5,11 @@ module.exports = (sequelize, DataTypes) => {
       //table structure
       cod_contrato: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: false
       },
       descripcion: {
         type: DataTypes.STRING(45),
-        allowNull: false,
+        allowNull: false
       },
       fecha_contrato: {
         type: DataTypes.DATE,
@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       valor_contrato: {
         type: DataTypes.DECIMAL(8, 2),
-        allowNull: false,
+        allowNull: false
       },
       fecha_viaje: {
         type: DataTypes.DATE,
@@ -67,7 +67,7 @@ module.exports = (sequelize, DataTypes) => {
     */
     contratoGeneral.hasMany(models.ContratoIndividual, {
       as: 'contratos_individuales',
-      foreignKey: 'id_contrato_individual'
+      foreignKey: 'id_contrato_general' // ANTES ERA: id_contrato_individual
     });
     contratoGeneral.belongsToMany(models.Responsable, {
       through: 'responsables_contratos_generales', //relation name

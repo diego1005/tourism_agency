@@ -5,12 +5,12 @@ const router = Router();
 const passengerController = require('../controllers/passengerController');
 
 //middlewares
-const { userIsAdmin } = require('../middlewares/authMiddlewares/authMiddlewares');
+const { tokenIsValid } = require('../middlewares/authMiddlewares/authMiddlewares');
 
 //outes
-router.get('/', userIsAdmin, passengerController.getPassengers);
-router.post('/', userIsAdmin, passengerController.passengerCreate);
-router.put('/:id', userIsAdmin, passengerController.passengerUpgrade);
-router.delete('/:id', userIsAdmin, passengerController.passengerDelete);
+router.get('/', tokenIsValid, passengerController.getPassengers);
+router.post('/', tokenIsValid, passengerController.passengerCreate);
+router.put('/:id', tokenIsValid, passengerController.passengerUpgrade);
+router.delete('/:id', tokenIsValid, passengerController.passengerDelete);
 
 module.exports = router;

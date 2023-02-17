@@ -1,35 +1,56 @@
-const { USER_ADMIN_ROLE } = require('../../constants/roles');
+const { SUPER, ADMIN, USER } = require('../../constants/roles');
 const jwt = require('../../helpers/jwt');
 
 module.exports = {
-  checkToken: (req, res, next) => {
-    const token = req.headers['authorization'].split('Bearer ')[1] || { token: null };
-    const auth = jwt.verify(token);
-    if (!token || !auth) {
-      return res.status(404).json({
-        msg: 'invalid or expired token',
-        status: 'denied'
+  tokenIsValid: (req, res, next) => {
+    const token = req.headers['authorization'];
+    if (!token) {
+      return res.status(401).json({
+        status: 'unauthorized',
+        msg: 'Acceso denegado. Debes enviar un token valido'
+      });
+    }
+    const bearer = token.split('Bearer ')[1];
+    const auth = jwt.verify(bearer);
+    if (!bearer || !auth) {
+      return res.status(403).json({
+        status: 'denied',
+        msg: 'Token no válido o expirado'
       });
     } else {
-      req.user = jwt.decode(token);
-      req.token = token;
+      req.user = jwt.decode(bearer);
+      req.token = bearer;
       next();
     }
   },
-  userIsAdmin: (req, res, next) => {
-    const token = req.headers['authorization'];
-    if (!token) {
+  isUser: (req, res, next) => {
+    const { user } = req;
+    if (user.rol.name !== SUPER && !user.rol.name !== ADMIN && !user.rol.name !== USER) {
       return res.status(403).json({
-        msg: 'Acceso denegado. Debes enviar un token valido',
-        status: 'unauthorized'
+        status: 'unauthorized',
+        msg: 'Acceso denegado'
       });
+    } else {
+      next();
     }
-    console.log(token);
-    const decoded = jwt.decode(token.split('Bearer ')[1]);
-    if (decoded.role.name !== 'super') {
-      res.status(401).json({
-        msg: 'Acceso denegado',
-        status: 'unauthorized'
+  },
+  isAdmin: (req, res, next) => {
+    const { user } = req;
+    if (user.rol.name !== SUPER && !user.rol.name !== ADMIN) {
+      return res.status(403).json({
+        status: 'unauthorized',
+        msg: 'Acceso denegado'
+      });
+    } else {
+      next();
+    }
+  },
+  isSuper: (req, res, next) => {
+    const { user } = req;
+    if (user.rol.name !== SUPER) {
+      return res.status(403).json({
+        status: 'unauthorized',
+        msg: 'Acceso denegado'
       });
     } else {
       next();

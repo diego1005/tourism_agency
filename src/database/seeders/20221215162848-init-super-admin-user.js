@@ -8,7 +8,7 @@ module.exports = {
     return queryInterface.bulkInsert('Usuarios', [
       {
         nombre: 'super',
-        apellido: 'admin',
+        apellido: '',
         email: 'super@admin.com',
         password: await bcrypt.hash('super33'),
         id_rol: 1,
@@ -16,9 +16,18 @@ module.exports = {
         updated_at: new Date()
       },
       {
-        nombre: 'editor',
-        apellido: 'admin',
-        email: 'editor@admin.com',
+        nombre: 'admin',
+        apellido: '',
+        email: 'admin@admin.com',
+        password: await bcrypt.hash('super33'),
+        id_rol: 2,
+        created_at: new Date(),
+        updated_at: new Date()
+      },
+      {
+        nombre: 'user',
+        apellido: '',
+        email: 'user@admin.com',
         password: await bcrypt.hash('super33'),
         id_rol: 2,
         created_at: new Date(),

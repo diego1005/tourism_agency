@@ -9,11 +9,11 @@ module.exports = (sequelize, DataTypes) => {
       },
       valor_contrato: {
         type: DataTypes.DECIMAL(8, 2),
-        allowNull: false,
+        allowNull: false
       },
       saldo: {
         type: DataTypes.DECIMAL(8, 2),
-        allowNull: false,
+        allowNull: false
       },
       estado: {
         type: DataTypes.ENUM('Pendiente', 'Saldado'),
@@ -37,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
   contratoIndividual.associate = (models) => {
     contratoIndividual.belongsTo(models.Pasajero, {
       as: 'pasajero', //relationship name
-      foreignKey: 'id_contrato_individual'
+      foreignKey: 'id_pasajero'
     });
     contratoIndividual.belongsTo(models.ContratoGeneral, {
       as: 'contrato_general',

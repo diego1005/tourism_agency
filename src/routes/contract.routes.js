@@ -7,10 +7,10 @@ const genContractRoutes = require('./contracts/general.routes');
 
 //Middleware
 //auth middlewares
-const { userIsAdmin } = require('../middlewares/authMiddlewares/authMiddlewares');
+const { tokenIsValid } = require('../middlewares/authMiddlewares/authMiddlewares');
 
 //routes
-router.use('/individuals', userIsAdmin, indContractRoutes);
-router.use('/generals', userIsAdmin, genContractRoutes);
+router.use('/individuals', tokenIsValid, indContractRoutes);
+router.use('/generals', tokenIsValid, genContractRoutes);
 
 module.exports = router;
