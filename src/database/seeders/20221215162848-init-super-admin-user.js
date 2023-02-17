@@ -20,7 +20,7 @@ module.exports = {
         apellido: 'admin',
         email: 'editor@admin.com',
         password: await bcrypt.hash('super33'),
-        id_role: 2,
+        id_rol: 2,
         created_at: new Date(),
         updated_at: new Date()
       }

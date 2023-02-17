@@ -3,7 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    return queryInterface.bulkInsert('Roles', [
+    return queryInterface.bulkInsert('Rols', [
       {
         rol: 'super',
         descripcion: 'super admin user',
@@ -20,6 +20,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    return queryInterface.bulkDelete('Roles', null, {});
+    return queryInterface.bulkDelete('Rols', null, {});
   }
 };
