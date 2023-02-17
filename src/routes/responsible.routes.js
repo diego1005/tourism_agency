@@ -5,12 +5,15 @@ const router = Router();
 const responsibleController = require('../controllers/responsibleController');
 
 //middlewares
-const { userIsAdmin } = require('../middlewares/authMiddlewares/authMiddlewares');
+const { tokenIsValid, isUser, isAdmin } = require('../middlewares/auth/authMiddlewares');
+const { responsibleExist, responsibleAlreadyExist } = require('../middlewares/responsible/responsibleMiddlewares');
+const { validatesCreateForm } = require('../middlewares/responsible/validationsFields');
 
-//outes
-router.get('/responsible/add', responsibleController.getResponsible);
-router.post('/responsible/add', responsibleController.responsibleCreate);
-router.put('/responsible/edit/:id', responsibleController.responsibleUpgrade);
-router.delete('/responsible/delete/:id', responsibleController.responsibleDelete);
+//routes
+router.get('/', [tokenIsValid, isUser], responsibleController.get);
+router.get('/:id', [tokenIsValid, isUser, responsibleExist], responsibleController.getById);
+router.post('/', [tokenIsValid, isUser, validatesCreateForm, responsibleAlreadyExist], responsibleController.create);
+router.put('/:id', [tokenIsValid, isUser, validatesCreateForm, responsibleExist], responsibleController.edit);
+router.delete('/:id', [tokenIsValid, isAdmin], responsibleController.delete);
 
 module.exports = router;

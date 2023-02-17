@@ -37,11 +37,13 @@ module.exports = (sequelize, DataTypes) => {
   pasajero.associate = (models) => {
     pasajero.belongsTo(models.Responsable, {
       as: 'responsable',
+      constraints: false,
       foreignKey: 'id_responsable'
     });
     pasajero.hasMany(models.ContratoIndividual, {
       as: 'contratos_individuales',
-      foreignKey: 'id_pasajero'
+      foreignKey: 'id_pasajero',
+      onDelete: 'cascade'
     });
   };
 

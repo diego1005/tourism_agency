@@ -3,26 +3,30 @@ module.exports = (sequelize, DataTypes) => {
     'ContratoIndividual', //alias
     {
       //table structure
+      cod_contrato: {
+        type: DataTypes.STRING(16),
+        allowNull: false
+      },
       fecha_contrato: {
         type: DataTypes.DATE,
         allowNull: false
       },
       valor_contrato: {
         type: DataTypes.DECIMAL(8, 2),
-        allowNull: false,
+        allowNull: false
       },
-      saldo: {
+      pagos: {
         type: DataTypes.DECIMAL(8, 2),
-        allowNull: false,
+        allowNull: false
       },
       estado: {
         type: DataTypes.ENUM('Pendiente', 'Saldado'),
         allowNull: false
-      },
-      ficha_medica: {
+      }
+      /* ficha_medica: {
         type: DataTypes.STRING(100),
         allowNull: false
-      }
+      } */
     },
     {
       //configs

@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
     'Rol', //alias
     {
       //table structure
-      rol: {
+      name: {
         type: DataTypes.STRING(25),
         allowNull: false
       },

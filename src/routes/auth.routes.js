@@ -5,12 +5,12 @@ const router = Router();
 const authController = require('../controllers/authController');
 
 //middlewares
-const { checkToken } = require('../middlewares/authMiddlewares/authMiddlewares');
-const { userExist } = require('../middlewares/userMiddlewares/userMiddlewares');
-const { validatesLoginForm } = require('../middlewares/userFormMiddlewares/validationsFields');
+const { tokenIsValid } = require('../middlewares/auth/authMiddlewares');
+const { userExist } = require('../middlewares/user/userMiddlewares');
+const { validatesLoginForm } = require('../middlewares/user/validationsFields');
 
 //routes
-router.post('/login', validatesLoginForm, userExist, authController.login);
-router.get('/checkToken', checkToken, authController.checkToken);
+router.post('/login', [validatesLoginForm, userExist], authController.login);
+// router.get('/checkToken', [tokenIsValid], authController.checkToken);
 
 module.exports = router;

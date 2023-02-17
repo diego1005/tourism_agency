@@ -15,17 +15,16 @@ module.exports = {
         if (!auth) {
           res.status(401).json({
             status: 'Unauthorized',
-            msg: "Las contraseñas no coinciden"
+            msg: 'Las contraseñas no coinciden'
           });
         } else {
           //creates security token
           const { user } = req;
-          const { password, id_rol, ...rest } = user;
-          console.log(rest);
+          const { password, ...rest } = user;
           const token = jwt.sign(rest);
           res.status(200).json({
             status: 'success',
-            msq: 'usuario logueado con exito',
+            msq: 'usuario logueado con éxito',
             user: rest,
             token
           });
@@ -46,8 +45,8 @@ module.exports = {
         status: 'bad request'
       });
     }
-  },
-  checkToken: (req, res) => {
+  }
+  /* checkToken: (req, res) => {
     const { nombre, apellido, email, id_rol } = req.user;
     const { token } = req;
     res.status(200).json({
@@ -56,5 +55,5 @@ module.exports = {
       token: token,
       status: 'success'
     });
-  }
+  } */
 };

@@ -1,25 +1,25 @@
-const { Pasajero, Responsable } = require('../database/models');
+const { Institucion } = require('../database/models');
 const { validationResult } = require('express-validator');
 
 module.exports = {
   get: async (req, res) => {
     try {
-      const passengers = await Pasajero.findAll({
-        include: [
+      const institutions = await Institucion.findAll({
+        /* include: [
           {
             model: Responsable,
             as: 'responsable'
           }
-        ]
+        ] */
       });
       res.status(200).json({
         status: 'success',
-        count: passengers.length,
-        data: passengers
+        count: institutions.length,
+        data: institutions
       });
     } catch (error) {
       res.status(409).json({
-        msg: 'Ha ocurrido un error al intentar traer los pasajeros',
+        msg: 'Ha ocurrido un error al intentar recuperar las instituciones',
         error,
         status: 'error'
       });
@@ -28,24 +28,24 @@ module.exports = {
   getById: (req, res) => {
     res.status(200).json({
       status: 'success',
-      msg: 'Pasajero encontrado',
-      data: req.passenger
+      msg: 'Institución encontrada',
+      data: req.institution
     });
   },
   create: async (req, res) => {
     const errors = validationResult(req);
     if (errors.isEmpty()) {
       try {
-        const passenger = req.body;
-        await Pasajero.create(passenger);
+        const institution = req.body;
+        await Institucion.create(institution);
         res.status(200).json({
           status: 'success',
-          msg: 'Pasajero creado con éxito'
+          msg: 'Institucion creada con éxito'
         });
       } catch (error) {
         res.status(409).json({
           status: 'error',
-          msg: 'Ha ocurrido un error al intentar crear el pasajero',
+          msg: 'Ha ocurrido un error al intentar crear la institución',
           error
         });
       }
@@ -62,17 +62,17 @@ module.exports = {
     const errors = validationResult(req);
     if (errors.isEmpty()) {
       try {
-        const passenger = req.body;
+        const institution = req.body;
         const { id } = req.params;
-        await Pasajero.update({ ...passenger }, { where: { id } });
+        await Institucion.update({ ...institution }, { where: { id } });
         res.status(200).json({
           status: 'success',
-          msg: 'Pasajero editado con éxito'
+          msg: 'Institución editada con éxito'
         });
       } catch (error) {
         res.status(409).json({
           status: 'error',
-          msg: 'Ha ocurrido un error al intentar editar el pasajero',
+          msg: 'Ha ocurrido un error al intentar editar la institución',
           error
         });
       }
@@ -88,14 +88,14 @@ module.exports = {
   delete: async (req, res) => {
     try {
       const { id } = req.params;
-      await Pasajero.destroy({ where: { id } });
+      await Institucion.destroy({ where: { id } });
       res.status(200).json({
         status: 'success',
-        msg: 'Pasajero borrado con éxito'
+        msg: 'Institución borrada con éxito'
       });
     } catch (error) {
       res.status(409).json({
-        msg: 'Ha ocurrido un error al intentar borrar el pasajero',
+        msg: 'Ha ocurrido un error al intentar borrar la institución',
         error,
         status: 'error'
       });

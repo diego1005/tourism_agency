@@ -1,25 +1,25 @@
-const { Pasajero, Responsable } = require('../database/models');
+const { ContratoGeneral, Institucion } = require('../../database/models');
 const { validationResult } = require('express-validator');
 
 module.exports = {
   get: async (req, res) => {
     try {
-      const passengers = await Pasajero.findAll({
+      const generalContracts = await ContratoGeneral.findAll({
         include: [
           {
-            model: Responsable,
-            as: 'responsable'
+            model: Institucion,
+            as: 'institucion'
           }
         ]
       });
       res.status(200).json({
         status: 'success',
-        count: passengers.length,
-        data: passengers
+        count: generalContracts.length,
+        data: generalContracts
       });
     } catch (error) {
       res.status(409).json({
-        msg: 'Ha ocurrido un error al intentar traer los pasajeros',
+        msg: 'Ha ocurrido un error al intentar recuperar los contratos generales',
         error,
         status: 'error'
       });
@@ -28,24 +28,29 @@ module.exports = {
   getById: (req, res) => {
     res.status(200).json({
       status: 'success',
-      msg: 'Pasajero encontrado',
-      data: req.passenger
+      msg: 'Contrato general encontrado',
+      data: req.generalContract
     });
   },
   create: async (req, res) => {
     const errors = validationResult(req);
     if (errors.isEmpty()) {
       try {
-        const passenger = req.body;
-        await Pasajero.create(passenger);
+        console.log('2');
+        const generalContract = req.body;
+        const { cod_contrato } = req;
+        const now = new Date();
+        const estado = 'Pendiente';
+        await ContratoGeneral.create({ ...generalContract, fecha_contrato: now, cod_contrato, estado });
         res.status(200).json({
           status: 'success',
-          msg: 'Pasajero creado con éxito'
+          msg: 'Contrato general creado con éxito',
+          cod_contrato
         });
       } catch (error) {
         res.status(409).json({
           status: 'error',
-          msg: 'Ha ocurrido un error al intentar crear el pasajero',
+          msg: 'Ha ocurrido un error al intentar crear el contrato general',
           error
         });
       }
@@ -62,17 +67,18 @@ module.exports = {
     const errors = validationResult(req);
     if (errors.isEmpty()) {
       try {
-        const passenger = req.body;
+        const generalContract = req.body;
+        const { fecha_contrato, cod_contrato, estado, ...rest } = generalContract;
         const { id } = req.params;
-        await Pasajero.update({ ...passenger }, { where: { id } });
+        await ContratoGeneral.update({ ...rest }, { where: { id } });
         res.status(200).json({
           status: 'success',
-          msg: 'Pasajero editado con éxito'
+          msg: 'Contrato general editado con éxito'
         });
       } catch (error) {
         res.status(409).json({
           status: 'error',
-          msg: 'Ha ocurrido un error al intentar editar el pasajero',
+          msg: 'Ha ocurrido un error al intentar editar el contrato general',
           error
         });
       }
@@ -88,14 +94,14 @@ module.exports = {
   delete: async (req, res) => {
     try {
       const { id } = req.params;
-      await Pasajero.destroy({ where: { id } });
+      await ContratoGeneral.destroy({ where: { id } });
       res.status(200).json({
         status: 'success',
-        msg: 'Pasajero borrado con éxito'
+        msg: 'Contrato general borrado con éxito'
       });
     } catch (error) {
       res.status(409).json({
-        msg: 'Ha ocurrido un error al intentar borrar el pasajero',
+        msg: 'Ha ocurrido un error al intentar borrar el contrato general',
         error,
         status: 'error'
       });

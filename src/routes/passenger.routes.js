@@ -5,12 +5,15 @@ const router = Router();
 const passengerController = require('../controllers/passengerController');
 
 //middlewares
-const { userIsAdmin } = require('../middlewares/authMiddlewares/authMiddlewares');
+const { tokenIsValid, isUser, isAdmin } = require('../middlewares/auth/authMiddlewares');
+const { passengerExist, passengerAlreadyExist } = require('../middlewares/passenger/passengerMiddlewares');
+const { validatesCreateForm } = require('../middlewares/passenger/validationsFields');
 
-//outes
-router.get('/', userIsAdmin, passengerController.getPassengers);
-router.post('/', userIsAdmin, passengerController.passengerCreate);
-router.put('/:id', userIsAdmin, passengerController.passengerUpgrade);
-router.delete('/:id', userIsAdmin, passengerController.passengerDelete);
+//routes
+router.get('/', [tokenIsValid, isUser], passengerController.get);
+router.get('/:id', [tokenIsValid, isUser, passengerExist], passengerController.getById);
+router.post('/', [tokenIsValid, isUser, validatesCreateForm, passengerAlreadyExist], passengerController.create);
+router.put('/:id', [tokenIsValid, isUser, validatesCreateForm, passengerExist], passengerController.edit);
+router.delete('/:id', [tokenIsValid, isAdmin], passengerController.delete);
 
 module.exports = router;

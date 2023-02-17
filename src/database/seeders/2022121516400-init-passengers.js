@@ -8,8 +8,8 @@ module.exports = {
         nombre: 'Ana',
         apellido: 'García',
         documento: '63000111',
-        fecha_nac: new Date(),
-        obs_medicas: 'Sancor Salud',
+        fecha_nac: '2010-10-06',
+        obs_medicas: 'Alérgica',
         id_responsable: 1,
         created_at: new Date(),
         updated_at: new Date()
@@ -18,8 +18,8 @@ module.exports = {
         nombre: 'Lucas',
         apellido: 'García',
         documento: '63000222',
-        fecha_nac: new Date(),
-        obs_medicas: 'Sancor Salud',
+        fecha_nac: '2010-10-06',
+        obs_medicas: '',
         id_responsable: 1,
         created_at: new Date(),
         updated_at: new Date()
