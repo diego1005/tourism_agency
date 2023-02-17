@@ -1,22 +1,20 @@
 'use strict';
 
-const bcrypt = require('../../helpers/bcrypt');
-
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    return queryInterface.bulkInsert('ResponsibleSeniors', [
+    return queryInterface.bulkInsert('Responsables', [
       {
-        firstname: 'Papá de Ana y Lucas',
-        lastname: 'García',
-        document: '28126367',
-        birthdate: new Date(),
+        nombre: 'Papá de Ana y Lucas',
+        apellido: 'García',
+        documento: '28126367',
+        fecha_nac: new Date(),
         email: 'papadeanaylucas@garcia.com',
-        phone: '3516114150',
-        address: 'Lima 890',
-        city: 'Salta',
-        province: 'Salta',
-        postalcode: '5000',
+        telefono: '3516114150',
+        direccion: 'Lima 890',
+        ciudad: 'Salta',
+        provincia: 'Salta',
+        codigo_postal: '5000',
         created_at: new Date(),
         updated_at: new Date()
       }
@@ -24,6 +22,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    return queryInterface.bulkDelete('ResponsibleSeniors', null, {});
+    return queryInterface.bulkDelete('Responsables', null, {});
   }
 };
