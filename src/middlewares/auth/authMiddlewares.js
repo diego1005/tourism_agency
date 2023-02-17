@@ -25,35 +25,36 @@ module.exports = {
   },
   isUser: (req, res, next) => {
     const { user } = req;
-    if (user.rol.name !== SUPER && !user.rol.name !== ADMIN && !user.rol.name !== USER) {
+    if (user.rol.name === SUPER || user.rol.name === ADMIN || user.rol.name === USER) {
+      return next();
+    } else {
       return res.status(403).json({
         status: 'unauthorized',
         msg: 'Acceso denegado'
       });
-    } else {
-      next();
     }
   },
   isAdmin: (req, res, next) => {
     const { user } = req;
-    if (user.rol.name !== SUPER && !user.rol.name !== ADMIN) {
+    console.log(user.rol.name);
+    if (user.rol.name === SUPER || user.rol.name === ADMIN) {
+      return next();
+    } else {
       return res.status(403).json({
         status: 'unauthorized',
         msg: 'Acceso denegado'
       });
-    } else {
-      next();
     }
   },
   isSuper: (req, res, next) => {
     const { user } = req;
-    if (user.rol.name !== SUPER) {
+    if (user.rol.name === SUPER) {
+      return next();
+    } else {
       return res.status(403).json({
         status: 'unauthorized',
         msg: 'Acceso denegado'
       });
-    } else {
-      next();
     }
   }
 };

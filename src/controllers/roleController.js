@@ -1,9 +1,19 @@
+const { Op } = require('sequelize');
 const { Rol } = require('../database/models');
+const { SUPER } = require('../constants/roles');
 
 module.exports = {
   get: async (req, res) => {
     try {
-      const roles = await Rol.findAll();
+      let query = {};
+      if (req.user.rol.name !== SUPER) {
+        query = {
+          name: {
+            [Op.not]: SUPER
+          }
+        };
+      }
+      const roles = await Rol.findAll({ where: query });
       res.status(200).json({
         status: 'success',
         count: roles.length,
@@ -25,7 +35,7 @@ module.exports = {
         descripcion
       });
       res.status(200).json({
-        msg: 'Rol creado con exito',
+        msg: 'Rol creado con éxito',
         data: newRole,
         status: 'success'
       });
@@ -42,7 +52,7 @@ module.exports = {
       const { id } = req.params;
       await Rol.destroy({ where: { id } });
       res.status(200).json({
-        msg: 'Rol borrado con exito',
+        msg: 'Rol borrado con éxito',
         status: 'success'
       });
     } catch (error) {

@@ -5,7 +5,7 @@ const router = Router();
 const responsibleController = require('../controllers/responsibleController');
 
 //middlewares
-const { tokenIsValid, isUser, isAdmin } = require('../middlewares/authMiddlewares/authMiddlewares');
+const { tokenIsValid, isUser, isAdmin } = require('../middlewares/auth/authMiddlewares');
 const { responsibleExist, responsibleAlreadyExist } = require('../middlewares/responsible/responsibleMiddlewares');
 const { validatesCreateForm } = require('../middlewares/responsible/validationsFields');
 

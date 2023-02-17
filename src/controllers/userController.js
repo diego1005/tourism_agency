@@ -1,11 +1,23 @@
+const { Op } = require('sequelize');
 const { Usuario, Rol } = require('../database/models');
+const { SUPER } = require('../constants/roles');
 const { validationResult } = require('express-validator');
+
 const bcrypt = require('../helpers/bcrypt');
 
 module.exports = {
   get: async (req, res) => {
     try {
+      let query = {};
+      if (req.user.rol.name !== SUPER) {
+        query = {
+          id_rol: {
+            [Op.not]: 1
+          }
+        };
+      }
       const listUsers = await Usuario.findAll({
+        where: query,
         attributes: { exclude: ['password'] },
         include: [
           {
@@ -44,7 +56,6 @@ module.exports = {
       //new user
       try {
         const user = req.body;
-        console.log(user);
         const { password } = user;
         const hashPassword = await bcrypt.hash(password);
         await Usuario.create({
@@ -155,7 +166,7 @@ module.exports = {
       const { id } = req.params;
       const deletedUser = await Usuario.destroy({ where: { id } });
       res.status(200).json({
-        msg: 'Usuario borrado con exito',
+        msg: 'Usuario borrado con éxito',
         status: 'success'
       });
     } catch (error) {

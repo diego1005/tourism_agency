@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       //table structure
       cod_contrato: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING(7),
         allowNull: false
       },
       descripcion: {
@@ -55,19 +55,10 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   contratoGeneral.associate = (models) => {
-    /*
-    contratoGeneral.belongsTo(models.TourPackage, {
-      as: 'tour_package', //relationship name
-      foreignKey: 'id_tour_package'
-    });
-    contratoGeneral.belongsTo(models.StateGeneralContract, {
-      as: 'state_general_contracts',
-      foreignKey: 'id_state_general_contract'
-    });
-    */
     contratoGeneral.hasMany(models.ContratoIndividual, {
       as: 'contratos_individuales',
-      foreignKey: 'id_contrato_general' // ANTES ERA: id_contrato_individual
+      foreignKey: 'id_contrato_general',
+      onDelete: 'cascade'
     });
     contratoGeneral.belongsToMany(models.Responsable, {
       through: 'responsables_contratos_generales', //relation name
@@ -75,7 +66,8 @@ module.exports = (sequelize, DataTypes) => {
     });
     contratoGeneral.belongsTo(models.Institucion, {
       as: 'institucion', //relation name
-      foreignKey: 'id_contrato_general'
+      constraints: false,
+      foreignKey: 'id_institucion'
     });
   };
 

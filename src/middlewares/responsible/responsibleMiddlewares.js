@@ -1,5 +1,4 @@
 const { Responsable } = require('../../database/models');
-const { Op } = require('sequelize');
 
 module.exports = {
   responsibleExist: async (req, res, next) => {
@@ -23,7 +22,6 @@ module.exports = {
     }
   },
   responsibleAlreadyExist: async (req, res, next) => {
-    console.log(req.body);
     try {
       const { documento } = req.body;
       const { dataValues: responsible } = (await Responsable.findOne({ where: { documento } })) || { dataValues: null };

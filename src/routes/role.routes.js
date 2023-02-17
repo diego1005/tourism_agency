@@ -5,12 +5,12 @@ const router = Router();
 const roleController = require('../controllers/roleController');
 
 //middlewares
-const { roleExist } = require('../middlewares/roleMiddlewares/roleMiddlewares');
-const { tokenIsValid, isUser } = require('../middlewares/authMiddlewares/authMiddlewares');
+const { roleExist } = require('../middlewares/role/roleMiddlewares');
+const { tokenIsValid, isAdmin } = require('../middlewares/auth/authMiddlewares');
 
 //outes
-router.get('/', [tokenIsValid, isUser], roleController.get);
-router.post('/add', [tokenIsValid, isUser], roleController.create);
-router.delete('/delete/:id', [tokenIsValid, isUser], roleExist, roleController.delete);
+router.get('/', [tokenIsValid, isAdmin], roleController.get);
+router.post('/add', [tokenIsValid, isAdmin], roleController.create);
+router.delete('/delete/:id', [tokenIsValid, isAdmin], roleExist, roleController.delete);
 
 module.exports = router;

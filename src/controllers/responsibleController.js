@@ -37,7 +37,6 @@ module.exports = {
     if (errors.isEmpty()) {
       try {
         const responsible = req.body;
-        console.log(responsible);
         await Responsable.create(responsible);
         res.status(200).json({
           status: 'success',
@@ -92,7 +91,7 @@ module.exports = {
       await Responsable.destroy({ where: { id } });
       res.status(200).json({
         status: 'success',
-        msg: 'Responsable borrado con exito'
+        msg: 'Responsable borrado con éxito'
       });
     } catch (error) {
       res.status(409).json({

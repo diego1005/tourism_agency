@@ -24,7 +24,7 @@ module.exports = {
           const token = jwt.sign(rest);
           res.status(200).json({
             status: 'success',
-            msq: 'usuario logueado con exito',
+            msq: 'usuario logueado con éxito',
             user: rest,
             token
           });

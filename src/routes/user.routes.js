@@ -5,13 +5,13 @@ const router = Router();
 const userController = require('../controllers/userController');
 
 //middlewares
-const { userExist, userAlreadyExist } = require('../middlewares/userMiddlewares/userMiddlewares');
-const { tokenIsValid, isUser, isAdmin } = require('../middlewares/authMiddlewares/authMiddlewares');
-const { validatesCreateForm, validatesEditForm, validatesChangePass } = require('../middlewares/userMiddlewares/validationsFields');
+const { userExist, userAlreadyExist } = require('../middlewares/user/userMiddlewares');
+const { tokenIsValid, isUser, isAdmin } = require('../middlewares/auth/authMiddlewares');
+const { validatesCreateForm, validatesEditForm, validatesChangePass } = require('../middlewares/user/validationsFields');
 
 //routes
-router.get('/', [tokenIsValid, isUser], userController.get);
-router.get('/:id', [tokenIsValid, isUser, userExist], userController.getById);
+router.get('/', [tokenIsValid, isAdmin], userController.get);
+router.get('/:id', [tokenIsValid, isAdmin, userExist], userController.getById);
 router.post('/', [tokenIsValid, isAdmin, validatesCreateForm, userAlreadyExist], userController.create);
 router.put('/:id', [tokenIsValid, isAdmin, validatesEditForm, userExist], userController.edit);
 router.patch('/:id', [tokenIsValid, isUser, validatesChangePass, userExist], userController.editPass);
