@@ -13,6 +13,10 @@ module.exports = {
               model: Institucion,
               as: 'institucion'
             }
+          },
+          {
+            model: Pasajero,
+            as: 'pasajero'
           }
         ]
       });
