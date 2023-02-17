@@ -1,4 +1,4 @@
-const { ContratoIndividual, ContratoGeneral, Institucion } = require('../../../database/models');
+const { ContratoIndividual, ContratoGeneral, Institucion, Pasajero } = require('../../../database/models');
 
 module.exports = {
   individualContractExist: async (req, res, next) => {
@@ -14,6 +14,10 @@ module.exports = {
               model: Institucion,
               as: 'institucion'
             }
+          },
+          {
+            model: Pasajero,
+            as: 'pasajero'
           }
         ]
       })) || { dataValues: null };
