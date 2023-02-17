@@ -64,6 +64,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'id_responsable',
       onDelete: 'cascade'
     });
+    responsable.belongsToMany(models.ContratoGeneral, {
+      through: 'responsables_contratos_generales', //relation name
+      foreignKey: 'id_responsable',
+    });
   };
 
   return responsable;

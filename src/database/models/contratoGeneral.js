@@ -62,7 +62,7 @@ module.exports = (sequelize, DataTypes) => {
     });
     contratoGeneral.belongsToMany(models.Responsable, {
       through: 'responsables_contratos_generales', //relation name
-      foreignKey: 'id_responsables_contratos_generales'
+      foreignKey: 'id_contrato_general',
     });
     contratoGeneral.belongsTo(models.Institucion, {
       as: 'institucion', //relation name
