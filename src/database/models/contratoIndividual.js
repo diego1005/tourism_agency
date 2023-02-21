@@ -39,6 +39,10 @@ module.exports = (sequelize, DataTypes) => {
       as: 'contrato_general',
       foreignKey: 'id_contrato_general'
     });
+    contratoIndividual.hasMany(models.Cuota, {
+      as: 'cuotas',
+      foreignKey: 'id_contrato_individual'
+    });
   };
 
   return contratoIndividual;
