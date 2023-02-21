@@ -53,8 +53,7 @@ module.exports = (sequelize, DataTypes) => {
   contratoGeneral.associate = (models) => {
     contratoGeneral.hasMany(models.ContratoIndividual, {
       as: 'contratos_individuales',
-      foreignKey: 'id_contrato_general',
-      onDelete: 'cascade'
+      foreignKey: 'id_contrato_general'
     });
     contratoGeneral.belongsToMany(models.Responsable, {
       through: 'responsables_contratos_generales', //relation name

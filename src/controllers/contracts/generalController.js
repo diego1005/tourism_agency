@@ -148,8 +148,7 @@ module.exports = {
         const generalContract = req.body;
         const { cod_contrato } = req;
         const now = new Date();
-        const estado = 'Pendiente';
-        await ContratoGeneral.create({ ...generalContract, fecha_contrato: now, cod_contrato, estado });
+        await ContratoGeneral.create({ ...generalContract, fecha_contrato: now, cod_contrato });
         res.status(200).json({
           status: 'success',
           msg: 'Contrato general creado con éxito',
@@ -176,7 +175,7 @@ module.exports = {
     if (errors.isEmpty()) {
       try {
         const generalContract = req.body;
-        const { fecha_contrato, cod_contrato, estado, ...rest } = generalContract;
+        const { fecha_contrato, cod_contrato, ...rest } = generalContract;
         const { id } = req.params;
         await ContratoGeneral.update({ ...rest }, { where: { id } });
         res.status(200).json({

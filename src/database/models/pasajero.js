@@ -42,8 +42,7 @@ module.exports = (sequelize, DataTypes) => {
     });
     pasajero.hasMany(models.ContratoIndividual, {
       as: 'contratos_individuales',
-      foreignKey: 'id_pasajero',
-      onDelete: 'cascade'
+      foreignKey: 'id_pasajero'
     });
   };
 
