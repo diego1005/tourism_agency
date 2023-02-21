@@ -59,6 +59,20 @@ module.exports = {
         id_institucion: '2',
         created_at: new Date(),
         updated_at: new Date()
+      },
+      {
+        cod_contrato: 'EEE-000',
+        descripcion: 'Ejemplo Contrato General CANCELADO',
+        valor_contrato: '77000',
+        fecha_viaje: '2023-09-10',
+        cupo_pasajeros: '52',
+        grado: '7',
+        division: 'B',
+        turno: 'Mañana',
+        estado: 'cancelado',
+        id_institucion: '1',
+        created_at: new Date(),
+        updated_at: new Date()
       }
     ]);
   },
