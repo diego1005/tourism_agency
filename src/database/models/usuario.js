@@ -32,13 +32,6 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   usuario.associate = (models) => {
-    /* usuario.hasOne(models.Student, {
-      foreignKey: 'id_usuario'
-    });
-    usuario.hasMany(models.IndividualContract, {
-      as: 'individual_contracts', //relation name
-      foreignKey: 'id_usuario'
-    }), */
     usuario.belongsTo(models.Rol, {
       as: 'rol',
       foreignKey: 'id_rol'

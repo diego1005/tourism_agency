@@ -33,7 +33,8 @@ module.exports = (sequelize, DataTypes) => {
   contratoIndividual.associate = (models) => {
     contratoIndividual.belongsTo(models.Pasajero, {
       as: 'pasajero', //relationship name
-      foreignKey: 'id_pasajero'
+      foreignKey: 'id_pasajero',
+      onDelete: 'restrict'
     });
     contratoIndividual.belongsTo(models.ContratoGeneral, {
       as: 'contrato_general',
