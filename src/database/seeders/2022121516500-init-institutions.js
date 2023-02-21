@@ -11,6 +11,14 @@ module.exports = {
         localidad: 'Córdoba',
         created_at: new Date(),
         updated_at: new Date()
+      },
+      {
+        nombre: 'Colegio Técnico N° 10',
+        direccion: 'Urquiza 572',
+        telefono: '3517689362',
+        localidad: 'Córdoba',
+        created_at: new Date(),
+        updated_at: new Date()
       }
     ]);
   },

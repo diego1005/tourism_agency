@@ -23,6 +23,16 @@ module.exports = {
         id_responsable: 1,
         created_at: new Date(),
         updated_at: new Date()
+      },
+      {
+        nombre: 'Matías',
+        apellido: 'Garnacho',
+        documento: '63000333',
+        fecha_nac: '2008-11-26',
+        obs_medicas: '',
+        id_responsable: 2,
+        created_at: new Date(),
+        updated_at: new Date()
       }
     ]);
   },
