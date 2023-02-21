@@ -8,11 +8,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       },
       descripcion: {
-        type: DataTypes.STRING(45),
-        allowNull: false
-      },
-      fecha_contrato: {
-        type: DataTypes.DATE,
+        type: DataTypes.STRING(55),
         allowNull: false
       },
       valor_contrato: {
@@ -36,11 +32,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       },
       turno: {
-        type: DataTypes.CHAR(1),
+        type: DataTypes.CHAR(6),
         allowNull: false
       },
       estado: {
-        type: DataTypes.ENUM('Pendiente', 'Saldado'),
+        type: DataTypes.ENUM('vigente', 'terminado'),
         allowNull: false
       }
     },
@@ -62,7 +58,7 @@ module.exports = (sequelize, DataTypes) => {
     });
     contratoGeneral.belongsToMany(models.Responsable, {
       through: 'responsables_contratos_generales', //relation name
-      foreignKey: 'id_contrato_general',
+      foreignKey: 'id_contrato_general'
     });
     contratoGeneral.belongsTo(models.Institucion, {
       as: 'institucion', //relation name

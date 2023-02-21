@@ -14,6 +14,9 @@ const { validatesCreateForm: validatesCreateFormIndividual } = require('../middl
 
 //routes -- GENERAL CONTRACTS
 router.get('/general', [tokenIsValid, isUser], generalContractController.get);
+router.get('/general/codes', [tokenIsValid, isUser], generalContractController.getCodes);
+router.get('/general/search', [tokenIsValid, isUser], generalContractController.getByQuery);
+router.get('/general/institution/:id', [tokenIsValid, isUser], generalContractController.getByInstitutionId);
 router.get('/general/:id', [tokenIsValid, isUser, generalContractExist], generalContractController.getById);
 router.post('/general', [tokenIsValid, isUser, validatesCreateForm, generalContractAlreadyExist], generalContractController.create);
 router.put('/general/:id', [tokenIsValid, isUser, validatesCreateForm, generalContractExist], generalContractController.edit);

@@ -45,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       info: {
         type: DataTypes.TEXT,
-        allowNull: true
+        defaultValue: ''
       }
     },
     {
@@ -66,7 +66,7 @@ module.exports = (sequelize, DataTypes) => {
     });
     responsable.belongsToMany(models.ContratoGeneral, {
       through: 'responsables_contratos_generales', //relation name
-      foreignKey: 'id_responsable',
+      foreignKey: 'id_responsable'
     });
   };
 

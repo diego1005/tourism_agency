@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const { Pasajero, Responsable } = require('../database/models');
 const { validationResult } = require('express-validator');
 
@@ -10,7 +11,8 @@ module.exports = {
             model: Responsable,
             as: 'responsable'
           }
-        ]
+        ],
+        order: [['id', 'DESC']]
       });
       res.status(200).json({
         status: 'success',
@@ -25,19 +27,89 @@ module.exports = {
       });
     }
   },
-  getById: (req, res) => {
+  getByResponsible: async (req, res) => {
+    try {
+      console.log('fede');
+      const { id } = req.params;
+      const passengers = await Pasajero.findAll({
+        where: { id_responsable: id },
+
+        order: [['id', 'DESC']]
+      });
+      res.status(200).json({
+        status: 'success',
+        count: passengers.length,
+        data: passengers
+      });
+    } catch (error) {
+      res.status(409).json({
+        msg: 'Ha ocurrido un error al intentar traer los pasajeros',
+        error,
+        status: 'error'
+      });
+    }
+  },
+  getById: async (req, res) => {
     res.status(200).json({
       status: 'success',
       msg: 'Pasajero encontrado',
       data: req.passenger
     });
   },
+  getByQuery: async (req, res) => {
+    try {
+      const { documento } = req.query;
+      const { apellido } = req.query;
+      let passengers;
+      if (documento) {
+        passengers = await Pasajero.findAll({
+          where: { documento },
+          include: [
+            {
+              model: Responsable,
+              as: 'responsable'
+            }
+          ],
+          order: [['id', 'DESC']]
+        });
+      }
+      if (apellido) {
+        passengers = await Pasajero.findAll({
+          where: {
+            apellido: {
+              [Op.like]: `%${apellido}%`
+            }
+          },
+          include: [
+            {
+              model: Responsable,
+              as: 'responsable'
+            }
+          ],
+          order: [['id', 'DESC']]
+        });
+      }
+      return res.status(200).json({
+        status: 'success',
+        msg: 'Pasajeros recuperados',
+        count: passengers.length,
+        data: passengers
+      });
+    } catch (error) {
+      res.status(409).json({
+        msg: 'Ha ocurrido un error al intentar recuperar los pasajeros',
+        error,
+        status: 'error'
+      });
+    }
+  },
   create: async (req, res) => {
     const errors = validationResult(req);
     if (errors.isEmpty()) {
       try {
         const passenger = req.body;
-        await Pasajero.create(passenger);
+        const responsibleId = req.responsible_id || null;
+        await Pasajero.create({ ...passenger, id_responsable: responsibleId });
         res.status(200).json({
           status: 'success',
           msg: 'Pasajero creado con éxito'
@@ -64,7 +136,12 @@ module.exports = {
       try {
         const passenger = req.body;
         const { id } = req.params;
-        await Pasajero.update({ ...passenger }, { where: { id } });
+        if (req.body.documento_responsable) {
+          const responsible = await Responsable.findOne({ where: { documento: req.body.documento_responsable }, attributes: ['id'] });
+          await Pasajero.update({ ...passenger, id_responsable: responsible.id }, { where: { id } });
+        } else {
+          await Pasajero.update({ ...passenger }, { where: { id } });
+        }
         res.status(200).json({
           status: 'success',
           msg: 'Pasajero editado con éxito'

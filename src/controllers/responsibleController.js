@@ -1,10 +1,12 @@
 const { Responsable } = require('../database/models');
 const { validationResult } = require('express-validator');
+const { Op } = require('sequelize');
 
 module.exports = {
   get: async (req, res) => {
     try {
       const responsibles = await Responsable.findAll({
+        order: [['id', 'DESC']]
         /* include: [
           {
             model: Pasajero,
@@ -19,7 +21,28 @@ module.exports = {
       });
     } catch (error) {
       res.status(409).json({
-        msg: 'Ha ocurrido un error al intentar traer los usuarios',
+        msg: 'Ha ocurrido un error al intentar recuperar los responsables',
+        error,
+        status: 'error'
+      });
+    }
+  },
+  getDocuments: async (req, res) => {
+    try {
+      const responsibles = await Responsable.findAll({
+        attributes: ['documento', 'apellido', 'nombre'],
+        order: [['id', 'DESC']]
+      });
+      const data = responsibles.map((el) => ({ label: `${el.documento} - ${el.apellido}, ${el.nombre}`, id: el.documento }));
+      //const data = responsibles.map((el) => el.documento);
+      res.status(200).json({
+        status: 'success',
+        count: responsibles.length,
+        data
+      });
+    } catch (error) {
+      res.status(409).json({
+        msg: 'Ha ocurrido un error al intentar recuperar los responsables',
         error,
         status: 'error'
       });
@@ -31,6 +54,41 @@ module.exports = {
       msg: 'Responsable encontrado',
       data: req.responsible
     });
+  },
+  getByQuery: async (req, res) => {
+    try {
+      const { documento } = req.query;
+      const { apellido } = req.query;
+      let responsibles;
+      if (documento) {
+        responsibles = await Responsable.findAll({
+          where: { documento },
+          order: [['id', 'DESC']]
+        });
+      }
+      if (apellido) {
+        responsibles = await Responsable.findAll({
+          where: {
+            apellido: {
+              [Op.like]: `%${apellido}%`
+            }
+          },
+          order: [['id', 'DESC']]
+        });
+      }
+      return res.status(200).json({
+        status: 'success',
+        msg: 'Resposables recuperados',
+        count: responsibles.length,
+        data: responsibles
+      });
+    } catch (error) {
+      res.status(409).json({
+        msg: 'Ha ocurrido un error al intentar recuperar los responsables',
+        error,
+        status: 'error'
+      });
+    }
   },
   create: async (req, res) => {
     const errors = validationResult(req);

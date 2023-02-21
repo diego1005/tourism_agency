@@ -11,6 +11,8 @@ const { validatesCreateForm } = require('../middlewares/responsible/validationsF
 
 //routes
 router.get('/', [tokenIsValid, isUser], responsibleController.get);
+router.get('/documents', [tokenIsValid, isUser], responsibleController.getDocuments);
+router.get('/search', [tokenIsValid, isUser], responsibleController.getByQuery);
 router.get('/:id', [tokenIsValid, isUser, responsibleExist], responsibleController.getById);
 router.post('/', [tokenIsValid, isUser, validatesCreateForm, responsibleAlreadyExist], responsibleController.create);
 router.put('/:id', [tokenIsValid, isUser, validatesCreateForm, responsibleExist], responsibleController.edit);

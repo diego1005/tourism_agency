@@ -11,6 +11,8 @@ const { validatesCreateForm } = require('../middlewares/institution/validationsF
 
 //routes
 router.get('/', [tokenIsValid, isUser], institutionController.get);
+router.get('/search', [tokenIsValid, isUser], institutionController.getByQuery);
+router.get('/codes', [tokenIsValid, isUser], institutionController.getCodes);
 router.get('/:id', [tokenIsValid, isUser, institutionExist], institutionController.getById);
 router.post('/', [tokenIsValid, isUser, validatesCreateForm, institutioAlreadyExist], institutionController.create);
 router.put('/:id', [tokenIsValid, isUser, validatesCreateForm, institutionExist], institutionController.edit);

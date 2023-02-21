@@ -5,7 +5,7 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     return queryInterface.bulkInsert('Responsables', [
       {
-        nombre: 'Juna Carlos',
+        nombre: 'Juan Carlos',
         apellido: 'García',
         documento: '28126367',
         fecha_nac: '1980-08-29',
@@ -15,6 +15,22 @@ module.exports = {
         ciudad: 'Córdoba',
         provincia: 'Córdoba',
         codigo_postal: '5000',
+        info: '',
+        created_at: new Date(),
+        updated_at: new Date()
+      },
+      {
+        nombre: 'Roberto',
+        apellido: 'Garnacho',
+        documento: '05515237',
+        fecha_nac: '1987-08-29',
+        email: 'roberto@garnacho.com',
+        telefono: '3517564940',
+        direccion: 'Roma 358',
+        ciudad: 'Córdoba',
+        provincia: 'Córdoba',
+        codigo_postal: '5000',
+        info: '',
         created_at: new Date(),
         updated_at: new Date()
       }

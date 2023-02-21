@@ -7,10 +7,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(16),
         allowNull: false
       },
-      fecha_contrato: {
-        type: DataTypes.DATE,
-        allowNull: false
-      },
       valor_contrato: {
         type: DataTypes.DECIMAL(8, 2),
         allowNull: false
@@ -20,13 +16,9 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       },
       estado: {
-        type: DataTypes.ENUM('Pendiente', 'Saldado'),
+        type: DataTypes.ENUM('vigente', 'terminado'),
         allowNull: false
       }
-      /* ficha_medica: {
-        type: DataTypes.STRING(100),
-        allowNull: false
-      } */
     },
     {
       //configs

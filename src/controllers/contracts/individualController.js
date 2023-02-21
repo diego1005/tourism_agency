@@ -18,7 +18,8 @@ module.exports = {
             model: Pasajero,
             as: 'pasajero'
           }
-        ]
+        ],
+        order: [['id', 'DESC']]
       });
       res.status(200).json({
         status: 'success',
@@ -48,15 +49,17 @@ module.exports = {
         const pagos = 0;
         const individualContract = req.body;
         const cod_contrato = 'XXXXXXXXXXXXXXXX';
-        await ContratoIndividual.create({ ...individualContract, cod_contrato, pagos, estado });
-        const { dataValues: contractGen } = await ContratoGeneral.findByPk(req.body.id_contrato_general);
-        const { dataValues: pasajero } = await Pasajero.findByPk(req.body.id_pasajero);
-        await ContratoIndividual.update({ cod_contrato: `${contractGen.cod_contrato}/${pasajero.documento}` }, { where: { cod_contrato } });
+        /* const fede =  */ await ContratoIndividual.create({ ...individualContract, cod_contrato, pagos, estado });
+        const { dataValues: contractGen } = await ContratoGeneral.findByPk(req.body.id_contrato_general, { attributes: ['cod_contrato'] });
+        const { dataValues: pasajero } = await Pasajero.findByPk(req.body.id_pasajero, { attributes: ['documento'] });
+        const contrato = contractGen.cod_contrato;
+        const documento = pasajero.documento;
+        await ContratoIndividual.update({ cod_contrato: `${contrato}/${documento}` }, { where: { cod_contrato } });
         res.status(200).json({
           status: 'success',
           msg: 'Contrato individual creado con éxito',
-          cod_contrato_general: contractGen.cod_contrato,
-          cod_contrato_individual: `${contractGen.cod_contrato}/${pasajero.documento}`
+          cod_contrato_general: contrato,
+          cod_contrato_individual: `${contrato}/${documento}`
         });
       } catch (error) {
         res.status(409).json({

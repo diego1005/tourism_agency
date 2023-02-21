@@ -1,4 +1,4 @@
-const { ContratoGeneral, Institucion } = require('../../../database/models');
+const { ContratoGeneral, ContratoIndividual, Institucion } = require('../../../database/models');
 const randomCode = require('../../../helpers/randomCode');
 
 module.exports = {
@@ -20,7 +20,10 @@ module.exports = {
           msg: 'El contrato general no existe'
         });
       } else {
-        req.generalContract = generalContract;
+        const individualContracts = await ContratoIndividual.findAll({
+          where: { id_contrato_general: generalContract.id }
+        });
+        req.generalContract = { ...generalContract, contratos_individuales: [...individualContracts] };
         next();
       }
     } catch (error) {

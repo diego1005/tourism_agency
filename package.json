@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "dev": "nodemon src/app.js",
-    "reset-db": "db_reset.sh"
+    "reset": "sh db_reset.sh"
   },
   "keywords": [],
   "author": "",
