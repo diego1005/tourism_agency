@@ -1,10 +1,12 @@
 const { Institucion } = require('../database/models');
 const { validationResult } = require('express-validator');
+const { Op } = require('sequelize');
 
 module.exports = {
   get: async (req, res) => {
     try {
       const institutions = await Institucion.findAll({
+        order: [['id', 'DESC']]
         /* include: [
           {
             model: Responsable,
@@ -31,6 +33,54 @@ module.exports = {
       msg: 'Institución encontrada',
       data: req.institution
     });
+  },
+  getCodes: async (req, res) => {
+    try {
+      const institutions = await Institucion.findAll({
+        attributes: ['id', 'nombre', 'direccion', 'localidad'],
+        order: [['id', 'DESC']]
+      });
+      const data = institutions.map((el) => ({ label: `${el.nombre} - ${el.direccion}, ${el.localidad}`, id: el.id }));
+      res.status(200).json({
+        status: 'success',
+        count: institutions.length,
+        data
+      });
+    } catch (error) {
+      res.status(409).json({
+        msg: 'Ha ocurrido un error al intentar recuperar las instituciones',
+        error,
+        status: 'error'
+      });
+    }
+  },
+  getByQuery: async (req, res) => {
+    try {
+      const { name } = req.query;
+      let institutions;
+      if (name) {
+        institutions = await Institucion.findAll({
+          where: {
+            nombre: {
+              [Op.like]: `%${name}%`
+            }
+          },
+          order: [['id', 'DESC']]
+        });
+      }
+      return res.status(200).json({
+        status: 'success',
+        msg: 'Instituciones recuperadas',
+        count: institutions.length,
+        data: institutions
+      });
+    } catch (error) {
+      res.status(409).json({
+        msg: 'Ha ocurrido un error al intentar recuperar las instituciones',
+        error,
+        status: 'error'
+      });
+    }
   },
   create: async (req, res) => {
     const errors = validationResult(req);

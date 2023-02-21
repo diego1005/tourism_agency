@@ -5,25 +5,23 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     return queryInterface.bulkInsert('ContratoIndividuals', [
       {
-        cod_contrato: 'AAA-000/63000111',
-        fecha_contrato: '2023-02-20',
+        cod_contrato: 'BBB-000/63000111',
         valor_contrato: 90000,
         pagos: 0,
-        estado: 'Pendiente',
-        id_contrato_general: '1',
+        estado: 'vigente',
+        id_contrato_general: '2',
         id_pasajero: '1',
         created_at: new Date(),
         updated_at: new Date()
       },
       {
-        cod_contrato: 'AAA-000/63000222',
-        fecha_contrato: '2023-02-20',
+        cod_contrato: 'BBB-000/63000222',
         valor_contrato: 90000,
         pagos: 0,
-        estado: 'Pendiente',
-        id_contrato_general: '1',
+        estado: 'vigente',
+        id_contrato_general: '2',
         id_pasajero: '2',
-        updated_at: new Date(),
+        created_at: new Date(),
         updated_at: new Date()
       }
     ]);

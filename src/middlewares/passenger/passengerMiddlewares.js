@@ -1,4 +1,4 @@
-const { Pasajero, Responsable } = require('../../database/models');
+const { ContratoIndividual, ContratoGeneral, Institucion, Pasajero, Responsable } = require('../../database/models');
 
 module.exports = {
   passengerExist: async (req, res, next) => {
@@ -19,7 +19,20 @@ module.exports = {
           msg: 'El pasajero no existe'
         });
       } else {
-        req.passenger = passenger;
+        const individualContracts = await ContratoIndividual.findAll({
+          where: { id_pasajero: passenger.id },
+          include: [
+            {
+              model: ContratoGeneral,
+              as: 'contrato_general',
+              include: {
+                model: Institucion,
+                as: 'institucion'
+              }
+            }
+          ]
+        });
+        req.passenger = { ...passenger, contratos_individuales: [...individualContracts] };
         next();
       }
     } catch (error) {
@@ -32,6 +45,7 @@ module.exports = {
   passengerAlreadyExist: async (req, res, next) => {
     try {
       const { documento } = req.body;
+      console.log(documento);
       const { dataValues: passenger } = (await Pasajero.findOne({ where: { documento } })) || { dataValues: null };
       if (!passenger) {
         next();
@@ -42,6 +56,31 @@ module.exports = {
           returnData: req.body
         });
       }
+    } catch (error) {
+      res.status(409).json({
+        status: 'error',
+        msg: 'Ha ocurido un error al intentar verificar el pasajero'
+      });
+    }
+  },
+  responsibleNotExist: async (req, res, next) => {
+    try {
+      const { documento_responsable } = req.body;
+      if (!documento_responsable) {
+        return next();
+      }
+      const { dataValues: responsible } = (await Responsable.findOne({ where: { documento: documento_responsable } })) || {
+        dataValues: null
+      };
+      if (!responsible) {
+        return res.status(409).json({
+          staus: 'denied',
+          msg: 'No existe un responsable con ese documento',
+          returnData: req.body
+        });
+      }
+      req.responsible_id = responsible.id;
+      next();
     } catch (error) {
       res.status(409).json({
         status: 'error',

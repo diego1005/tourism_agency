@@ -24,7 +24,8 @@ module.exports = {
             model: Rol,
             as: 'rol'
           }
-        ]
+        ],
+        order: [['id', 'DESC']]
       });
       res.status(200).json({
         status: 'success',
