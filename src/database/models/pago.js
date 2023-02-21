@@ -23,8 +23,9 @@ module.exports = (sequelize, DataTypes) => {
     );
 
     pago.associate = (models) => {
-        pago.belongsTo(models.Cuota, {
+        pago.hasOne(models.Cuota, {
             as: 'cuota',
+            foreignKey: 'id_pago'
         });
     };
 

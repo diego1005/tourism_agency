@@ -55,9 +55,9 @@ module.exports = (sequelize, DataTypes) => {
             as: 'contrato_individual',
             foreignKey: 'id_contrato_individual'
         });
-          cuota.hasOne(models.Pagos, {
+          cuota.belongsTo(models.Pago, {
             as: 'pago',
-            foreignKey: 'id_pago',
+            foreignKey: 'id_pago'
           });
     };
 
