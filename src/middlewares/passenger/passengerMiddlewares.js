@@ -1,4 +1,5 @@
 const { ContratoIndividual, ContratoGeneral, Institucion, Pasajero, Responsable } = require('../../database/models');
+const { SUPER } = require('../../constants/roles');
 
 module.exports = {
   passengerExist: async (req, res, next) => {
@@ -18,23 +19,26 @@ module.exports = {
           status: 'not found',
           msg: 'El pasajero no existe'
         });
-      } else {
-        const individualContracts = await ContratoIndividual.findAll({
-          where: { id_pasajero: passenger.id },
-          include: [
-            {
-              model: ContratoGeneral,
-              as: 'contrato_general',
-              include: {
-                model: Institucion,
-                as: 'institucion'
-              }
-            }
-          ]
-        });
-        req.passenger = { ...passenger, contratos_individuales: [...individualContracts] };
-        next();
       }
+      let individualContracts = await ContratoIndividual.findAll({
+        where: { id_pasajero: passenger.id },
+        include: [
+          {
+            model: ContratoGeneral,
+            as: 'contrato_general',
+            include: {
+              model: Institucion,
+              as: 'institucion'
+            }
+          }
+        ]
+      });
+      if (req.user.rol.name !== SUPER) {
+        const mapped = individualContracts.map((result) => result.dataValues);
+        individualContracts = mapped.filter((el) => el.estado === 'vigente');
+      }
+      req.passenger = { ...passenger, contratos_individuales: [...individualContracts] };
+      next();
     } catch (error) {
       res.status(409).json({
         status: 'error',

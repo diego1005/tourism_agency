@@ -38,12 +38,12 @@ module.exports = (sequelize, DataTypes) => {
     pasajero.belongsTo(models.Responsable, {
       as: 'responsable',
       constraints: false,
-      foreignKey: 'id_responsable'
+      foreignKey: 'id_responsable',
+      onDelete: 'restrict'
     });
     pasajero.hasMany(models.ContratoIndividual, {
       as: 'contratos_individuales',
-      foreignKey: 'id_pasajero',
-      onDelete: 'cascade'
+      foreignKey: 'id_pasajero'
     });
   };
 

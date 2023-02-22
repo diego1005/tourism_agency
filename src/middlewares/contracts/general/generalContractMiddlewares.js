@@ -1,11 +1,12 @@
 const { ContratoGeneral, ContratoIndividual, Institucion } = require('../../../database/models');
+const { SUPER } = require('../../../constants/roles');
 const randomCode = require('../../../helpers/randomCode');
 
 module.exports = {
   generalContractExist: async (req, res, next) => {
     try {
       const { id } = req.params;
-      const { dataValues: generalContract } = (await ContratoGeneral.findOne({
+      let { dataValues: generalContract } = (await ContratoGeneral.findOne({
         where: { id },
         include: [
           {
@@ -19,13 +20,18 @@ module.exports = {
           status: 'not found',
           msg: 'El contrato general no existe'
         });
-      } else {
-        const individualContracts = await ContratoIndividual.findAll({
-          where: { id_contrato_general: generalContract.id }
-        });
-        req.generalContract = { ...generalContract, contratos_individuales: [...individualContracts] };
-        next();
       }
+      if (req.user.rol.name !== SUPER && generalContract.estado !== 'vigente') {
+        return res.status(404).json({
+          status: 'not found',
+          msg: 'El contrato general no existe'
+        });
+      }
+      const individualContracts = await ContratoIndividual.findAll({
+        where: { id_contrato_general: generalContract.id }
+      });
+      req.generalContract = { ...generalContract, contratos_individuales: [...individualContracts] };
+      next();
     } catch (error) {
       res.status(409).json({
         status: 'error',

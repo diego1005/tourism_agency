@@ -1,10 +1,11 @@
 const { ContratoIndividual, ContratoGeneral, Institucion } = require('../../database/models');
+const { SUPER } = require('../../constants/roles');
 const { validationResult } = require('express-validator');
 
 module.exports = {
   get: async (req, res) => {
     try {
-      const generalContracts = await ContratoGeneral.findAll({
+      let generalContracts = await ContratoGeneral.findAll({
         include: [
           {
             model: Institucion,
@@ -13,6 +14,11 @@ module.exports = {
         ],
         order: [['id', 'DESC']]
       });
+      if (req.user.rol.name !== SUPER) {
+        console.log('NO SOY SUPER :(');
+        const mapped = generalContracts.map((result) => result.dataValues);
+        generalContracts = mapped.filter((el) => el.estado === 'vigente');
+      }
       res.status(200).json({
         status: 'success',
         count: generalContracts.length,
@@ -29,7 +35,6 @@ module.exports = {
   getByQuery: async (req, res) => {
     try {
       const { cod_contrato } = req.query;
-      console.log(cod_contrato);
       let generalContracts;
       if (cod_contrato) {
         generalContracts = await ContratoGeneral.findAll({
@@ -42,6 +47,11 @@ module.exports = {
           ],
           order: [['id', 'DESC']]
         });
+      }
+      if (req.user.rol.name !== SUPER) {
+        console.log('NO SOY SUPER :(');
+        const mapped = generalContracts.map((result) => result.dataValues);
+        generalContracts = mapped.filter((el) => el.estado === 'vigente');
       }
       return res.status(200).json({
         status: 'success',
@@ -63,6 +73,11 @@ module.exports = {
         attributes: ['id', 'cod_contrato', 'descripcion'],
         order: [['id', 'DESC']]
       });
+      if (req.user.rol.name !== SUPER) {
+        console.log('NO SOY SUPER :(');
+        const mapped = generalContracts.map((result) => result.dataValues);
+        generalContracts = mapped.filter((el) => el.estado === 'vigente');
+      }
       const data = generalContracts.map((el) => ({ label: `${el.cod_contrato} - ${el.descripcion}`, id: el.id }));
       res.status(200).json({
         status: 'success',
@@ -87,7 +102,7 @@ module.exports = {
   getByInstitutionId: async (req, res) => {
     const { id: id_institucion } = req.params;
     try {
-      const generalContracts = await ContratoGeneral.findAll({
+      let generalContracts = await ContratoGeneral.findAll({
         where: { id_institucion },
         include: [
           {
@@ -98,7 +113,7 @@ module.exports = {
         order: [['id', 'DESC']]
       });
       const GC = generalContracts.map((result) => result.dataValues);
-      const data = await Promise.all(
+      let data = await Promise.all(
         GC.map(async (el) => {
           const partial = await ContratoIndividual.findAll({ where: { id_contrato_general: el.id } });
           return {
@@ -107,6 +122,11 @@ module.exports = {
           };
         })
       );
+      if (req.user.rol.name !== SUPER) {
+        console.log('NO SOY SUPER :(');
+        const mapped = data.filter((el) => el.estado === 'vigente');
+        data = mapped.filter((el) => el.estado === 'vigente');
+      }
       res.status(200).json({
         status: 'success',
         count: GC.length,
@@ -114,7 +134,7 @@ module.exports = {
       });
     } catch (error) {
       res.status(409).json({
-        msg: 'Ha ocurrido un error al intentar recuperar los contratos generales',
+        msg: 'Ha ocurrido un error al intentar recuperar los contratos generales........',
         error,
         status: 'error'
       });
@@ -128,8 +148,7 @@ module.exports = {
         const generalContract = req.body;
         const { cod_contrato } = req;
         const now = new Date();
-        const estado = 'Pendiente';
-        await ContratoGeneral.create({ ...generalContract, fecha_contrato: now, cod_contrato, estado });
+        await ContratoGeneral.create({ ...generalContract, fecha_contrato: now, cod_contrato });
         res.status(200).json({
           status: 'success',
           msg: 'Contrato general creado con éxito',
@@ -156,7 +175,7 @@ module.exports = {
     if (errors.isEmpty()) {
       try {
         const generalContract = req.body;
-        const { fecha_contrato, cod_contrato, estado, ...rest } = generalContract;
+        const { fecha_contrato, cod_contrato, ...rest } = generalContract;
         const { id } = req.params;
         await ContratoGeneral.update({ ...rest }, { where: { id } });
         res.status(200).json({
