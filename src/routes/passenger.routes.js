@@ -12,6 +12,7 @@ const { validatesCreateForm } = require('../middlewares/passenger/validationsFie
 //routes
 router.get('/', [tokenIsValid, isUser], passengerController.get);
 router.get('/responsible/:id', [tokenIsValid, isUser], passengerController.getByResponsible);
+router.get('/codes', [tokenIsValid, isUser], passengerController.getCodes);
 router.get('/search', [tokenIsValid, isUser], passengerController.getByQuery);
 router.get('/:id', [tokenIsValid, isUser, passengerExist], passengerController.getById);
 router.post('/', [tokenIsValid, isUser, validatesCreateForm, passengerAlreadyExist, responsibleNotExist], passengerController.create);

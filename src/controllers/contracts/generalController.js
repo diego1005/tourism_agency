@@ -68,29 +68,31 @@ module.exports = {
     }
   },
   getCodes: async (req, res) => {
-    try {
-      const generalContracts = await ContratoGeneral.findAll({
-        attributes: ['id', 'cod_contrato', 'descripcion'],
-        order: [['id', 'DESC']]
-      });
-      if (req.user.rol.name !== SUPER) {
-        console.log('NO SOY SUPER :(');
-        const mapped = generalContracts.map((result) => result.dataValues);
-        generalContracts = mapped.filter((el) => el.estado === 'vigente');
-      }
-      const data = generalContracts.map((el) => ({ label: `${el.cod_contrato} - ${el.descripcion}`, id: el.id }));
-      res.status(200).json({
-        status: 'success',
-        count: generalContracts.length,
-        data
-      });
-    } catch (error) {
+    /* try { */
+    let generalContracts = await ContratoGeneral.findAll({
+      attributes: ['id', 'cod_contrato', 'descripcion', 'estado'],
+      order: [['id', 'DESC']]
+    });
+    if (req.user.rol.name !== SUPER) {
+      console.log('NO SOY SUPER :(');
+      const mapped = generalContracts.map((result) => result.dataValues);
+      generalContracts = mapped.filter((el) => el.estado === 'vigente');
+    }
+    const data = generalContracts
+      .filter((el) => el.estado === 'vigente')
+      .map((el) => ({ label: `${el.cod_contrato} - ${el.descripcion}`, id: el.id }));
+    res.status(200).json({
+      status: 'success',
+      count: generalContracts.length,
+      data
+    });
+    /*   } catch (error) {
       res.status(409).json({
         msg: 'Ha ocurrido un error al intentar recuperar los responsables',
         error,
         status: 'error'
       });
-    }
+    } */
   },
   getById: (req, res) => {
     res.status(200).json({

@@ -24,6 +24,9 @@ router.delete('/general/:id', [tokenIsValid, isAdmin], generalContractController
 
 //routes -- INDIVIDUAL CONTRACTS
 router.get('/individual', [tokenIsValid, isUser], individualContractController.get);
+router.get('/individual/search', [tokenIsValid, isUser], individualContractController.getByQuery);
+router.post('/individual/recalculate/:id', [tokenIsValid, isUser], individualContractController.recalculate);
+router.get('/individual/installments/:id', [tokenIsValid, isUser], individualContractController.installments);
 router.get('/individual/:id', [tokenIsValid, isUser, individualContractExist], individualContractController.getById);
 router.post('/individual', [tokenIsValid, isUser, validatesCreateFormIndividual], individualContractController.create);
 router.put(

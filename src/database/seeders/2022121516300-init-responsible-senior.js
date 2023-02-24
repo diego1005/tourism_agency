@@ -33,6 +33,21 @@ module.exports = {
         info: '',
         created_at: new Date(),
         updated_at: new Date()
+      },
+      {
+        nombre: 'Mirtha',
+        apellido: 'Sierra de  Pérez',
+        documento: '17234577',
+        fecha_nac: '1982-08-05',
+        email: 'mirtha@peres.com',
+        telefono: '3512295354',
+        direccion: 'Libertad 1754',
+        ciudad: 'Córdoba',
+        provincia: 'Córdoba',
+        codigo_postal: '5000',
+        info: 'Es tá casada con un tal Pérez',
+        created_at: new Date(),
+        updated_at: new Date()
       }
     ]);
   },

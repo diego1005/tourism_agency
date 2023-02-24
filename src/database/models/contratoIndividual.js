@@ -15,6 +15,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DECIMAL(8, 2),
         allowNull: false
       },
+      recargos_pagos_segundo_vencimiento: {
+        type: DataTypes.DECIMAL(8, 2),
+        allowNull: false
+      },
       estado: {
         type: DataTypes.ENUM('vigente', 'terminado', 'cancelado'),
         allowNull: false

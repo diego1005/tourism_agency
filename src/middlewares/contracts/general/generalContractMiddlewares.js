@@ -27,9 +27,14 @@ module.exports = {
           msg: 'El contrato general no existe'
         });
       }
-      const individualContracts = await ContratoIndividual.findAll({
+      let individualContracts = await ContratoIndividual.findAll({
         where: { id_contrato_general: generalContract.id }
       });
+      if (req.user.rol.name !== SUPER) {
+        const mapped = individualContracts.map((el) => el.dataValues);
+        individualContracts = mapped.filter((el) => el.estado === 'vigente');
+      }
+
       req.generalContract = { ...generalContract, contratos_individuales: [...individualContracts] };
       next();
     } catch (error) {
