@@ -49,6 +49,31 @@ module.exports = {
       });
     }
   },
+  getCodes: async (req, res) => {
+    try {
+      const passengers = await Pasajero.findAll({
+        where: {
+          id_responsable: {
+            [Op.not]: null
+          }
+        },
+        attributes: ['id', 'apellido', 'nombre', 'documento'],
+        order: [['id', 'DESC']]
+      });
+      const data = passengers.map((el) => ({ label: `${el.documento} - ${el.apellido}, ${el.nombre}`, id: el.id }));
+      res.status(200).json({
+        status: 'success',
+        count: passengers.length,
+        data
+      });
+    } catch (error) {
+      res.status(409).json({
+        msg: 'Ha ocurrido un error al intentar recuperar los pasajeros',
+        error,
+        status: 'error'
+      });
+    }
+  },
   getById: async (req, res) => {
     res.status(200).json({
       status: 'success',

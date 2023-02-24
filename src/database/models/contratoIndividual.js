@@ -15,6 +15,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DECIMAL(8, 2),
         allowNull: false
       },
+      recargos_pagos_segundo_vencimiento: {
+        type: DataTypes.DECIMAL(8, 2),
+        allowNull: false
+      },
       estado: {
         type: DataTypes.ENUM('vigente', 'terminado', 'cancelado'),
         allowNull: false
@@ -39,6 +43,10 @@ module.exports = (sequelize, DataTypes) => {
     contratoIndividual.belongsTo(models.ContratoGeneral, {
       as: 'contrato_general',
       foreignKey: 'id_contrato_general'
+    });
+    contratoIndividual.hasMany(models.Cuota, {
+      as: 'cuotas',
+      foreignKey: 'id_contrato_individual'
     });
   };
 

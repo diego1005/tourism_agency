@@ -33,6 +33,26 @@ module.exports = {
         id_responsable: 2,
         created_at: new Date(),
         updated_at: new Date()
+      },
+      {
+        nombre: 'Laura',
+        apellido: 'Pérez',
+        documento: '63000444',
+        fecha_nac: '2005-03-21',
+        obs_medicas: '',
+        id_responsable: 3,
+        created_at: new Date(),
+        updated_at: new Date()
+      },
+      {
+        nombre: 'Manuel',
+        apellido: 'Espósito',
+        documento: '63000555',
+        fecha_nac: '2003-04-10',
+        obs_medicas: 'Huérfano',
+        id_responsable: null,
+        created_at: new Date(),
+        updated_at: new Date()
       }
     ]);
   },

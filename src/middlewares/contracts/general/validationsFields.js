@@ -6,7 +6,7 @@ const validates = {
     check('descripcion').notEmpty().withMessage('Este campo es requerido'),
     check('valor_contrato').notEmpty().withMessage('Este campo es requerido'),
     check('fecha_viaje').notEmpty().withMessage('Este campo es requerido'),
-    check('cupo_pasajeros').notEmpty().withMessage('Este campo es requerido'),
+    check('asientos_totales').notEmpty().withMessage('Este campo es requerido'),
     check('grado').notEmpty().withMessage('Este campo es requerido'),
     check('division').notEmpty().withMessage('Este campo es requerido'),
     check('turno').notEmpty().withMessage('Este campo es requerido'),

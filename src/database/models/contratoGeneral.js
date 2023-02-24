@@ -19,7 +19,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DATE,
         allowNull: false
       },
-      cupo_pasajeros: {
+      asientos_totales: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
+      asientos_ocupados: {
         type: DataTypes.INTEGER,
         allowNull: false
       },

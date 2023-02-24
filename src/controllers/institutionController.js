@@ -5,14 +5,8 @@ const { Op } = require('sequelize');
 module.exports = {
   get: async (req, res) => {
     try {
-      const institutions = await Institucion.findAll({
+      let institutions = await Institucion.findAll({
         order: [['id', 'DESC']]
-        /* include: [
-          {
-            model: Responsable,
-            as: 'responsable'
-          }
-        ] */
       });
       res.status(200).json({
         status: 'success',
