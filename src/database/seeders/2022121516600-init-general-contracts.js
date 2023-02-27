@@ -6,7 +6,7 @@ module.exports = {
     return queryInterface.bulkInsert('ContratoGenerals', [
       {
         cod_contrato: 'AAA-000',
-        descripcion: 'Cataratas del Iguazú - 7 noches - Hotel 3 estrellas',
+        descripcion: 'Cataratas del Iguazú - 7 noches - hotel 3 estrellas',
         valor_contrato: 90000,
         fecha_viaje: '2023-12-08',
         asientos_totales: 55,
@@ -20,7 +20,7 @@ module.exports = {
         updated_at: new Date()
       },
       {
-        descripcion: 'Bariloche- 10 noches - Hotel 3 estrellas',
+        descripcion: 'Bariloche - 10 noches - hotel 3 estrellas',
         cod_contrato: 'BBB-000',
         valor_contrato: 150000,
         fecha_viaje: '2023-09-08',

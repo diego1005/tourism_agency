@@ -29,7 +29,6 @@ module.exports = {
   },
   getByResponsible: async (req, res) => {
     try {
-      console.log('fede');
       const { id } = req.params;
       const passengers = await Pasajero.findAll({
         where: { id_responsable: id },
@@ -88,7 +87,11 @@ module.exports = {
       let passengers;
       if (documento) {
         passengers = await Pasajero.findAll({
-          where: { documento },
+          where: {
+            documento: {
+              [Op.like]: `%${documento}%`
+            }
+          },
           include: [
             {
               model: Responsable,

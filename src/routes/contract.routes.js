@@ -24,16 +24,18 @@ router.delete('/general/:id', [tokenIsValid, isAdmin], generalContractController
 
 //routes -- INDIVIDUAL CONTRACTS
 router.get('/individual', [tokenIsValid, isUser], individualContractController.get);
+router.get('/individual/codes', [tokenIsValid, isUser], individualContractController.getCodes);
 router.get('/individual/search', [tokenIsValid, isUser], individualContractController.getByQuery);
 router.post('/individual/recalculate/:id', [tokenIsValid, isUser], individualContractController.recalculate);
 router.get('/individual/installments/:id', [tokenIsValid, isUser], individualContractController.installments);
 router.get('/individual/:id', [tokenIsValid, isUser, individualContractExist], individualContractController.getById);
 router.post('/individual', [tokenIsValid, isUser, validatesCreateFormIndividual], individualContractController.create);
+router.put('/individual/new-implements/:id', [tokenIsValid, isUser], individualContractController.newShares);
 router.put(
   '/individual/:id',
   [tokenIsValid, isUser, validatesCreateFormIndividual, individualContractExist],
   individualContractController.edit
 );
-router.delete('/individual/:id', [tokenIsValid, isAdmin], individualContractController.delete);
+router.delete('/individual/:id', [tokenIsValid, isAdmin, individualContractExist], individualContractController.delete);
 
 module.exports = router;

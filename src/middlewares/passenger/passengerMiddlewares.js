@@ -35,7 +35,7 @@ module.exports = {
       });
       if (req.user.rol.name !== SUPER) {
         const mapped = individualContracts.map((result) => result.dataValues);
-        individualContracts = mapped.filter((el) => el.estado === 'vigente');
+        individualContracts = mapped.filter((el) => el.estado === 'vigente' || el.estado === 'pagado');
       }
       req.passenger = { ...passenger, contratos_individuales: [...individualContracts] };
       next();
@@ -49,7 +49,6 @@ module.exports = {
   passengerAlreadyExist: async (req, res, next) => {
     try {
       const { documento } = req.body;
-      console.log(documento);
       const { dataValues: passenger } = (await Pasajero.findOne({ where: { documento } })) || { dataValues: null };
       if (!passenger) {
         next();

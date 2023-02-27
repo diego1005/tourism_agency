@@ -33,8 +33,8 @@ module.exports = {
       },
       {
         numero: 2,
-        fecha_primer_vencimiento: date.plus({ days: 60 }).toISODate(),
-        fecha_segundo_vencimiento: date.plus({ days: 90 }).toISODate(),
+        fecha_primer_vencimiento: '2023-02-10',
+        fecha_segundo_vencimiento: '2023-03-12',
         valor_primer_vencimiento: 15000,
         valor_segundo_vencimiento: 16500,
         estado: 'pendiente',
@@ -215,65 +215,9 @@ module.exports = {
         id_movimiento: 9,
         created_at: new Date(),
         updated_at: new Date()
-      },
-      // Contrato 4
-      {
-        numero: 0,
-        fecha_primer_vencimiento: date.toISODate(),
-        fecha_segundo_vencimiento: date.toISODate(),
-        valor_primer_vencimiento: 36000,
-        valor_segundo_vencimiento: 36000,
-        estado: 'pagada',
-        id_contrato_individual: 4,
-        id_movimiento: 10,
-        created_at: new Date(),
-        updated_at: new Date()
-      },
-      {
-        numero: 1,
-        fecha_primer_vencimiento: date.plus({ days: 30 }).toISODate(),
-        fecha_segundo_vencimiento: date.plus({ days: 60 }).toISODate(),
-        valor_primer_vencimiento: 13500,
-        valor_segundo_vencimiento: 14850,
-        estado: 'pagada',
-        id_contrato_individual: 4,
-        id_movimiento: 11,
-        created_at: new Date(),
-        updated_at: new Date()
-      },
-      {
-        numero: 2,
-        fecha_primer_vencimiento: date.plus({ days: 60 }).toISODate(),
-        fecha_segundo_vencimiento: date.plus({ days: 90 }).toISODate(),
-        valor_primer_vencimiento: 13500,
-        valor_segundo_vencimiento: 14850,
-        estado: 'pendiente',
-        id_contrato_individual: 4,
-        created_at: new Date(),
-        updated_at: new Date()
-      },
-      {
-        numero: 3,
-        fecha_primer_vencimiento: date.plus({ days: 90 }).toISODate(),
-        fecha_segundo_vencimiento: date.plus({ days: 120 }).toISODate(),
-        valor_primer_vencimiento: 13500,
-        valor_segundo_vencimiento: 14850,
-        estado: 'pendiente',
-        id_contrato_individual: 4,
-        created_at: new Date(),
-        updated_at: new Date()
-      },
-      {
-        numero: 4,
-        fecha_primer_vencimiento: date.plus({ days: 120 }).toISODate(),
-        fecha_segundo_vencimiento: date.plus({ days: 150 }).toISODate(),
-        valor_primer_vencimiento: 13500,
-        valor_segundo_vencimiento: 14850,
-        estado: 'pendiente',
-        id_contrato_individual: 4,
-        created_at: new Date(),
-        updated_at: new Date()
       }
+      // Contrato 4
+      // No hay cuotas (contrato cancelado)
     ]);
   },
 
