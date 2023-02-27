@@ -84,10 +84,10 @@ module.exports = {
         updated_at: new Date()
       },
       {
-        importe: -14850,
+        importe: -13500,
         tipo: 'egreso',
         forma_pago: 'egreso',
-        info: 'Devolución 1ra cuota Contracto AAA-000/63000444',
+        info: 'Devolución de cuotas por eliminación de Contrato Individual AAA-000/63000444',
         created_at: new Date(),
         updated_at: new Date()
       }

@@ -32,7 +32,7 @@ module.exports = {
       });
       if (req.user.rol.name !== SUPER) {
         const mapped = individualContracts.map((el) => el.dataValues);
-        individualContracts = mapped.filter((el) => el.estado === 'vigente');
+        individualContracts = mapped.filter((el) => el.estado === 'vigente' || el.estado === 'pagado');
       }
 
       req.generalContract = { ...generalContract, contratos_individuales: [...individualContracts] };
@@ -46,10 +46,7 @@ module.exports = {
   },
   generalContractAlreadyExist: async (req, res, next) => {
     try {
-      // const { cod_contrato } = req.body;
-      console.log('1');
       const cod_contrato = randomCode();
-      console.log(cod_contrato);
       const { dataValues: generalContract } = (await ContratoGeneral.findOne({ where: { cod_contrato } })) || { dataValues: null };
       if (!generalContract) {
         req.cod_contrato = cod_contrato;

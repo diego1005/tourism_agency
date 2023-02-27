@@ -9,6 +9,7 @@ const responsibleRoutes = require('./responsible.routes');
 const passengerRoutes = require('./passenger.routes');
 const contractRoutes = require('./contract.routes');
 const institutionRoutes = require('./institution.routes');
+const installmentRoutes = require('./installment.routes');
 const settingsRoutes = require('./settings.routes');
 
 router.use('/auth', authRoutes);
@@ -18,6 +19,7 @@ router.use('/responsibles', responsibleRoutes);
 router.use('/passengers', passengerRoutes);
 router.use('/contracts', contractRoutes);
 router.use('/institutions', institutionRoutes);
+router.use('/installments', installmentRoutes);
 router.use('/settings', settingsRoutes);
 
 module.exports = router;

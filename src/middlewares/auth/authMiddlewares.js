@@ -36,7 +36,6 @@ module.exports = {
   },
   isAdmin: (req, res, next) => {
     const { user } = req;
-    console.log(user.rol.name);
     if (user.rol.name === SUPER || user.rol.name === ADMIN) {
       return next();
     } else {

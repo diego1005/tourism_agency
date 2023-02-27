@@ -1,6 +1,7 @@
-const { ContratoIndividual, ContratoGeneral, Institucion } = require('../../database/models');
+const { ContratoIndividual, ContratoGeneral, Institucion, Cuota } = require('../../database/models');
 const { SUPER } = require('../../constants/roles');
 const { validationResult } = require('express-validator');
+const { Op } = require('sequelize');
 
 module.exports = {
   get: async (req, res) => {
@@ -15,9 +16,8 @@ module.exports = {
         order: [['id', 'DESC']]
       });
       if (req.user.rol.name !== SUPER) {
-        console.log('NO SOY SUPER :(');
         const mapped = generalContracts.map((result) => result.dataValues);
-        generalContracts = mapped.filter((el) => el.estado === 'vigente');
+        generalContracts = mapped.filter((el) => el.estado === 'vigente' || el.estado === 'pagado');
       }
       res.status(200).json({
         status: 'success',
@@ -35,6 +35,7 @@ module.exports = {
   getByQuery: async (req, res) => {
     try {
       const { cod_contrato } = req.query;
+      const { name } = req.query;
       let generalContracts;
       if (cod_contrato) {
         generalContracts = await ContratoGeneral.findAll({
@@ -48,10 +49,38 @@ module.exports = {
           order: [['id', 'DESC']]
         });
       }
+      if (name) {
+        const institutions = await Institucion.findAll({
+          where: {
+            nombre: {
+              [Op.like]: `%${name}%`
+            }
+          },
+          attributes: ['id'],
+          order: [['id', 'DESC']]
+        });
+
+        const idInst = institutions.map((el) => el.id);
+        generalContracts = (
+          await Promise.all(
+            idInst.map((el) =>
+              ContratoGeneral.findAll({
+                where: { id_institucion: el },
+                include: [
+                  {
+                    model: Institucion,
+                    as: 'institucion'
+                  }
+                ],
+                order: [['id', 'DESC']]
+              })
+            )
+          )
+        ).flat();
+      }
       if (req.user.rol.name !== SUPER) {
-        console.log('NO SOY SUPER :(');
         const mapped = generalContracts.map((result) => result.dataValues);
-        generalContracts = mapped.filter((el) => el.estado === 'vigente');
+        generalContracts = mapped.filter((el) => el.estado === 'vigente' || el.estado === 'pagado');
       }
       return res.status(200).json({
         status: 'success',
@@ -68,31 +97,43 @@ module.exports = {
     }
   },
   getCodes: async (req, res) => {
-    /* try { */
-    let generalContracts = await ContratoGeneral.findAll({
-      attributes: ['id', 'cod_contrato', 'descripcion', 'estado'],
-      order: [['id', 'DESC']]
-    });
-    if (req.user.rol.name !== SUPER) {
-      console.log('NO SOY SUPER :(');
-      const mapped = generalContracts.map((result) => result.dataValues);
-      generalContracts = mapped.filter((el) => el.estado === 'vigente');
-    }
-    const data = generalContracts
-      .filter((el) => el.estado === 'vigente')
-      .map((el) => ({ label: `${el.cod_contrato} - ${el.descripcion}`, id: el.id }));
-    res.status(200).json({
-      status: 'success',
-      count: generalContracts.length,
-      data
-    });
-    /*   } catch (error) {
+    try {
+      const { id } = req.query;
+      let generalContracts = await ContratoGeneral.findAll({
+        include: [
+          {
+            model: Institucion,
+            as: 'institucion'
+          }
+        ],
+        order: [['id', 'DESC']]
+      });
+      if (id) {
+        const mapped = generalContracts.filter((el) => el.id == id);
+        generalContracts = mapped;
+      }
+      /* if (req.user.rol.name !== SUPER) {
+        const mapped = generalContracts.map((result) => result.dataValues);
+        generalContracts = mapped.filter((el) => el.estado === 'vigente' || el.estado === 'pagado');
+      } */
+      const data = generalContracts
+        .filter((el) => el.estado === 'vigente' || el.estado === 'pagado')
+        .map((el) => ({
+          label: `${el.cod_contrato} # ${el.institucion.nombre} - Grado:  ${el.grado} - División:  ${el.division} - Turno: ${el.turno} # (${el.descripcion})`,
+          id: el.id
+        }));
+      res.status(200).json({
+        status: 'success',
+        count: generalContracts.length,
+        data
+      });
+    } catch (error) {
       res.status(409).json({
         msg: 'Ha ocurrido un error al intentar recuperar los responsables',
         error,
         status: 'error'
       });
-    } */
+    }
   },
   getById: (req, res) => {
     res.status(200).json({
@@ -125,9 +166,8 @@ module.exports = {
         })
       );
       if (req.user.rol.name !== SUPER) {
-        console.log('NO SOY SUPER :(');
-        const mapped = data.filter((el) => el.estado === 'vigente');
-        data = mapped.filter((el) => el.estado === 'vigente');
+        const mapped = data.filter((el) => el.estado === 'vigente' || el.estado === 'pagado');
+        data = mapped.filter((el) => el.estado === 'vigente' || el.estado === 'pagado');
       }
       res.status(200).json({
         status: 'success',
@@ -146,11 +186,10 @@ module.exports = {
     const errors = validationResult(req);
     if (errors.isEmpty()) {
       try {
-        console.log('2');
         const generalContract = req.body;
         const { cod_contrato } = req;
         const now = new Date();
-        await ContratoGeneral.create({ ...generalContract, fecha_contrato: now, cod_contrato });
+        await ContratoGeneral.create({ ...generalContract, asientos_ocupados: 0, fecha_contrato: now, cod_contrato });
         res.status(200).json({
           status: 'success',
           msg: 'Contrato general creado con éxito',
@@ -177,12 +216,46 @@ module.exports = {
     if (errors.isEmpty()) {
       try {
         const generalContract = req.body;
-        const { fecha_contrato, cod_contrato, ...rest } = generalContract;
+        const { fecha_contrato, cod_contrato, estado, ...rest } = generalContract;
         const { id } = req.params;
-        await ContratoGeneral.update({ ...rest }, { where: { id } });
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // TODO:
+
+        const individualContracts = await ContratoIndividual.findAll({
+          where: { id_contrato_general: id },
+          attributes: ['id', 'estado']
+        });
+
+        if (estado === 'cancelado') {
+          const iContractsMapped = individualContracts.map((el) => el.dataValues);
+          const valids = iContractsMapped.filter((el) => el.estado === 'vigente');
+          if (valids.length > 0) {
+            return res.status(400).json({
+              status: 'error',
+              msg: 'Imposible cancelar contrato general. Tiene contratos individuales "vigentes"'
+            });
+          }
+        }
+
+        if (estado === 'terminado') {
+          const iContractsMapped = individualContracts.map((el) => el.dataValues);
+          const valids = iContractsMapped.filter((el) => el.estado === 'vigente');
+          if (valids.length > 0) {
+            return res.status(400).json({
+              status: 'error',
+              msg: 'Imposible terminar contrato general. Tiene contratos individuales "vigentes"'
+            });
+          }
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+        await ContratoGeneral.update({ estado, ...rest }, { where: { id } });
         res.status(200).json({
           status: 'success',
           msg: 'Contrato general editado con éxito'
+          /*  individualContracts,
+          cuotas: cuotas.flat(),
+          total_return */
         });
       } catch (error) {
         res.status(409).json({
