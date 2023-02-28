@@ -4,8 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node src/app.js",
-    "dev": "nodemon src/app.js",
+    "start": "node app.js",
+    "dev": "nodemon app.js",
     "reset": "sh db_reset.sh",
     "seed": "sh db_seed.sh",
     "resetseed": "sh db_reset_seed.sh"
