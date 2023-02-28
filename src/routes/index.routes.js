@@ -12,6 +12,7 @@ const institutionRoutes = require('./institution.routes');
 const installmentRoutes = require('./installment.routes');
 const settingsRoutes = require('./settings.routes');
 
+router.use("/", (req, res) => res.send("Hello World"));
 router.use('/auth', authRoutes);
 router.use('/roles', roleRoutes);
 router.use('/users', userRoutes);
