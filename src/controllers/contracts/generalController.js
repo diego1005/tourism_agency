@@ -218,8 +218,6 @@ module.exports = {
         const generalContract = req.body;
         const { fecha_contrato, cod_contrato, estado, ...rest } = generalContract;
         const { id } = req.params;
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // TODO:
 
         const individualContracts = await ContratoIndividual.findAll({
           where: { id_contrato_general: id },
@@ -228,34 +226,35 @@ module.exports = {
 
         if (estado === 'cancelado') {
           const iContractsMapped = individualContracts.map((el) => el.dataValues);
-          const valids = iContractsMapped.filter((el) => el.estado === 'vigente');
+          const valids = iContractsMapped.filter((el) => el.estado === 'vigente' || el.estado === 'pagado').map((el) => el.id);
           if (valids.length > 0) {
+            let msg = `Imposible cancelar contrato. Hay ${valids.length} contrato individual vigente o pagado.`;
+            if (valids.length > 1) msg = `Imposible cancelar contrato. Hay ${valids.length} contratos individuales vigentes o pagados.`;
             return res.status(400).json({
               status: 'error',
-              msg: 'Imposible cancelar contrato general. Tiene contratos individuales "vigentes"'
+              valids,
+              msg
             });
           }
         }
-
         if (estado === 'terminado') {
           const iContractsMapped = individualContracts.map((el) => el.dataValues);
-          const valids = iContractsMapped.filter((el) => el.estado === 'vigente');
+          let valids = iContractsMapped.filter((el) => el.estado === 'vigente').map((el) => el.id);
           if (valids.length > 0) {
             return res.status(400).json({
               status: 'error',
-              msg: 'Imposible terminar contrato general. Tiene contratos individuales "vigentes"'
+              valids,
+              msg: `Imposible terminar contrato, tiene contratos individuales vigentes.`
             });
           }
+          // TODO: tomar todos los contratos PAGADOS y pasarlos a TERMINADOS
+          valids = iContractsMapped.filter((el) => el.estado === 'pagado').map((el) => el.id);
+          await Promise.all(valids.map(async (el) => await ContratoIndividual.update({ estado: 'terminado' }, { where: { id: el } })));
         }
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////
         await ContratoGeneral.update({ estado, ...rest }, { where: { id } });
         res.status(200).json({
           status: 'success',
           msg: 'Contrato general editado con éxito'
-          /*  individualContracts,
-          cuotas: cuotas.flat(),
-          total_return */
         });
       } catch (error) {
         res.status(409).json({
@@ -276,7 +275,12 @@ module.exports = {
   delete: async (req, res) => {
     try {
       const { id } = req.params;
+
+      const individuals = await ContratoIndividual.findAll({ where: { id_contrato_general: id }, attributes: ['id'] });
+      await Promise.all(individuals.map(async (el) => await ContratoIndividual.destroy({ where: { id: el.id } })));
+
       await ContratoGeneral.destroy({ where: { id } });
+
       res.status(200).json({
         status: 'success',
         msg: 'Contrato general borrado con éxito'
