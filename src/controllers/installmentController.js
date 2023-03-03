@@ -12,6 +12,7 @@ module.exports = {
     const { id, cuota, movimiento, contratoIndividual } = req.body;
 
     const { descuento, recargo, diferencia_descripcion, ...rest } = movimiento;
+    // Revisar
 
     await Cuota.update({ estado: cuota.estado }, { where: { id: cuota.id } });
 
