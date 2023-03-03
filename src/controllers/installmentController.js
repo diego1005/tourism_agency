@@ -11,12 +11,19 @@ module.exports = {
   createPay: async (req, res) => {
     const { id, cuota, movimiento, contratoIndividual } = req.body;
 
-    const { descuento, descuento_descripcion, ...rest } = movimiento;
+    const { descuento, recargo, diferencia_descripcion, ...rest } = movimiento;
 
     await Cuota.update({ estado: cuota.estado }, { where: { id: cuota.id } });
 
     await Movimiento.create(rest);
-    await Movimiento.create({ importe: Number(descuento) * -1, tipo: 'egreso', forma_pago: 'egreso', info: descuento_descripcion });
+
+    if (Number(descuento) > 0) {
+      await Movimiento.create({ importe: Number(descuento) * -1, tipo: 'egreso', forma_pago: 'egreso', info: diferencia_descripcion });
+    }
+
+    if (Number(recargo) > 0) {
+      await Movimiento.create({ importe: Number(recargo), tipo: 'ingreso', forma_pago: rest.forma_pago, info: diferencia_descripcion });
+    }
 
     const individualContract = await ContratoIndividual.findByPk(id);
     const pagos = Number(individualContract.pagos);
