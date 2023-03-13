@@ -1,4 +1,4 @@
-const { ContratoGeneral, ContratoIndividual, Institucion } = require('../../../database/models');
+const { ContratoGeneral, ContratoIndividual, Institucion, Pasajero, Responsable } = require('../../../database/models');
 const { SUPER } = require('../../../constants/roles');
 const randomCode = require('../../../helpers/randomCode');
 
@@ -28,7 +28,17 @@ module.exports = {
         });
       }
       let individualContracts = await ContratoIndividual.findAll({
-        where: { id_contrato_general: generalContract.id }
+        where: { id_contrato_general: generalContract.id },
+        include: [
+          {
+            model: Pasajero,
+            as: 'pasajero',
+            include: {
+              model: Responsable,
+              as: 'responsable'
+            }
+          }
+        ]
       });
       if (req.user.rol.name !== SUPER) {
         const mapped = individualContracts.map((el) => el.dataValues);
@@ -47,6 +57,9 @@ module.exports = {
   generalContractAlreadyExist: async (req, res, next) => {
     try {
       const cod_contrato = randomCode();
+      /* 
+      TODO: Verificar que el código no está repetido
+      */
       const { dataValues: generalContract } = (await ContratoGeneral.findOne({ where: { cod_contrato } })) || { dataValues: null };
       if (!generalContract) {
         req.cod_contrato = cod_contrato;
