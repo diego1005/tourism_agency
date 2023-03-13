@@ -1,4 +1,3 @@
-const { SUPER } = require('../../constants/roles');
 const {
   ContratoIndividual,
   ContratoGeneral,
@@ -9,8 +8,9 @@ const {
   Movimiento,
   Responsable
 } = require('../../database/models');
+const { literal, Op } = require('sequelize');
+const { SUPER } = require('../../constants/roles');
 const { validationResult } = require('express-validator');
-const { Op } = require('sequelize');
 
 module.exports = {
   get: async (req, res) => {
@@ -27,14 +27,18 @@ module.exports = {
           },
           {
             model: Pasajero,
-            as: 'pasajero'
+            as: 'pasajero',
+            include: {
+              model: Responsable,
+              as: 'responsable'
+            }
           }
         ],
         order: [['id', 'DESC']]
       });
       if (req.user.rol.name !== SUPER) {
         const mapped = individualContracts?.map((result) => result.dataValues);
-        individualContracts = mapped?.filter((el) => el.estado === 'vigente' || el.estado === 'pagado');
+        individualContracts = mapped?.filter((el) => el.estado === 'vigente' || el.estado === 'pagado' || el.estado === 'cancelado');
       }
       res.status(200).json({
         status: 'success',
@@ -98,6 +102,7 @@ module.exports = {
     try {
       const { code, document, list, lastname } = req.query;
       let individualContracts;
+
       if (code) {
         individualContracts = await ContratoIndividual.findAll({
           where: {
@@ -116,12 +121,17 @@ module.exports = {
             },
             {
               model: Pasajero,
-              as: 'pasajero'
+              as: 'pasajero',
+              include: {
+                model: Responsable,
+                as: 'responsable'
+              }
             }
           ],
           order: [['id', 'DESC']]
         });
       }
+
       if (document) {
         individualContracts = await ContratoIndividual.findAll({
           where: {
@@ -140,12 +150,17 @@ module.exports = {
             },
             {
               model: Pasajero,
-              as: 'pasajero'
+              as: 'pasajero',
+              include: {
+                model: Responsable,
+                as: 'responsable'
+              }
             }
           ],
           order: [['id', 'DESC']]
         });
       }
+
       if (lastname) {
         const passengers = await Pasajero.findAll({
           where: {
@@ -156,6 +171,7 @@ module.exports = {
           attributes: ['id'],
           order: [['id', 'DESC']]
         });
+
         individualContracts = await Promise.all(
           passengers.map(
             async (el) =>
@@ -174,7 +190,11 @@ module.exports = {
                   },
                   {
                     model: Pasajero,
-                    as: 'pasajero'
+                    as: 'pasajero',
+                    include: {
+                      model: Responsable,
+                      as: 'responsable'
+                    }
                   }
                 ],
                 order: [['id', 'DESC']]
@@ -183,6 +203,7 @@ module.exports = {
         );
         individualContracts = individualContracts.flat();
       }
+
       if (list) {
         const parsedList = JSON.parse(list);
         individualContracts = await Promise.all(
@@ -211,7 +232,7 @@ module.exports = {
       }
       if (req.user.rol.name !== SUPER) {
         const mapped = individualContracts?.map((result) => result.dataValues);
-        individualContracts = mapped?.filter((el) => el.estado === 'vigente' || el.estado === 'pagado');
+        individualContracts = mapped?.filter((el) => el.estado === 'vigente' || el.estado === 'pagado' || el.estado === 'cancelado');
       }
       return res.status(200).json({
         status: 'success',
@@ -228,80 +249,80 @@ module.exports = {
     }
   },
   recalculate: async (req, res) => {
-    /* try { */
-    const { id } = req.params;
-    let { nuevo_valor } = req.body;
-    nuevo_valor = Number(nuevo_valor);
+    try {
+      const { id } = req.params;
+      let { nuevo_valor } = req.body;
+      nuevo_valor = Number(nuevo_valor);
 
-    const contratoIndividual = await ContratoIndividual.findByPk(id);
-    const { valor_contrato } = contratoIndividual;
-    const diferencia_precio = Number(nuevo_valor) - Number(valor_contrato);
+      const contratoIndividual = await ContratoIndividual.findByPk(id);
+      const { valor_contrato } = contratoIndividual;
+      const diferencia_precio = Number(nuevo_valor) - Number(valor_contrato);
 
-    const seniaYCuotas = await Cuota.findAll({
-      where: {
-        id_contrato_individual: id
-      },
-      attributes: ['id', 'valor_primer_vencimiento', 'valor_segundo_vencimiento', 'estado', 'numero']
-    });
-
-    const parametros = await Parametro.findOne({
-      where: {
-        id: 1
-      },
-      attributes: ['porcentaje_recargo_segundo_vencimiento']
-    });
-
-    const porcentajeRecargo = parametros.porcentaje_recargo_segundo_vencimiento;
-
-    const senia = seniaYCuotas.find((el) => el.numero === 0);
-    const totalSenia = Number(senia.valor_primer_vencimiento);
-
-    const cuotasPagadas = seniaYCuotas.filter((el) => el.numero !== 0 && el.estado === 'pagada');
-    const cantidadCuotasPagadas = cuotasPagadas.length;
-    const cuotasPendientes = seniaYCuotas.filter((el) => el.numero !== 0 && el.estado !== 'pagada');
-    const cantidadCuotasPendientes = cuotasPendientes.length;
-
-    const totalCuotasPagadas = cuotasPagadas[0]?.valor_primer_vencimiento * cantidadCuotasPagadas;
-    const totalCuotasPendientes = cuotasPendientes[0].valor_primer_vencimiento * cantidadCuotasPendientes;
-
-    const cuotasRecalculadas = cuotasPendientes
-      .map((el) => el.dataValues)
-      .map((cuota) => {
-        const primerVencimiento = Number(cuota.valor_primer_vencimiento) + Number(diferencia_precio) / Number(cantidadCuotasPendientes);
-        return {
-          ...cuota,
-          valor_primer_vencimiento: primerVencimiento,
-          valor_segundo_vencimiento: primerVencimiento + (primerVencimiento * porcentajeRecargo) / 100
-        };
+      const seniaYCuotas = await Cuota.findAll({
+        where: {
+          id_contrato_individual: id
+        },
+        attributes: ['id', 'valor_primer_vencimiento', 'valor_segundo_vencimiento', 'estado', 'numero']
       });
 
-    res.status(200).json({
-      a: id,
-      status: 'success',
-      msg: 'Cuotas recalculadas',
-      diferencia_precio,
-      totalSenia,
-      totalCuotasPagadas,
-      totalCuotasPagadas,
-      totalCuotasPendientes,
-      cantidadCuotasPendientes,
-      cuotasRecalculadas,
-      cuotasPagadas,
-      senia,
-      newContractValue: nuevo_valor,
-      data: {
-        cuotasPendientes,
+      const parametros = await Parametro.findOne({
+        where: {
+          id: 1
+        },
+        attributes: ['porcentaje_recargo_segundo_vencimiento']
+      });
+
+      const porcentajeRecargo = parametros.porcentaje_recargo_segundo_vencimiento;
+
+      const senia = seniaYCuotas.find((el) => el.numero === 0);
+      const totalSenia = Number(senia.valor_primer_vencimiento);
+
+      const cuotasPagadas = seniaYCuotas.filter((el) => el.numero !== 0 && el.estado === 'pagada');
+      const cantidadCuotasPagadas = cuotasPagadas.length;
+      const cuotasPendientes = seniaYCuotas.filter((el) => el.numero !== 0 && el.estado !== 'pagada');
+      const cantidadCuotasPendientes = cuotasPendientes.length;
+
+      const totalCuotasPagadas = cuotasPagadas[0]?.valor_primer_vencimiento * cantidadCuotasPagadas;
+      const totalCuotasPendientes = cuotasPendientes[0].valor_primer_vencimiento * cantidadCuotasPendientes;
+
+      const cuotasRecalculadas = cuotasPendientes
+        .map((el) => el.dataValues)
+        .map((cuota) => {
+          const primerVencimiento = Number(cuota.valor_primer_vencimiento) + Number(diferencia_precio) / Number(cantidadCuotasPendientes);
+          return {
+            ...cuota,
+            valor_primer_vencimiento: primerVencimiento,
+            valor_segundo_vencimiento: primerVencimiento + (primerVencimiento * porcentajeRecargo) / 100
+          };
+        });
+
+      res.status(200).json({
+        a: id,
+        status: 'success',
+        msg: 'Cuotas recalculadas',
         diferencia_precio,
-        contratoIndividual
-      }
-    });
-    /* } catch (error) {
+        totalSenia,
+        totalCuotasPagadas,
+        totalCuotasPagadas,
+        totalCuotasPendientes,
+        cantidadCuotasPendientes,
+        cuotasRecalculadas,
+        cuotasPagadas,
+        senia,
+        newContractValue: nuevo_valor,
+        data: {
+          cuotasPendientes,
+          diferencia_precio,
+          contratoIndividual
+        }
+      });
+    } catch (error) {
       res.status(409).json({
         status: 'error',
         msg: 'Ha ocurrido un error al intentar recalcular las cuotas de un contrato individual',
         error
       });
-    } */
+    }
   },
   newShares: async (req, res) => {
     try {
@@ -364,19 +385,34 @@ module.exports = {
   create: async (req, res) => {
     const errors = validationResult(req);
     if (errors.isEmpty()) {
-      try {
-        const { id_contrato_general, id_pasajero, valor, cuotas, codigo_contrato_individual } = req.body;
+      /* try { */
+      const { id_contrato_general, id_pasajero, valor, cuotas, codigo_contrato_individual } = req.body;
 
-        const individualContractExist = await ContratoIndividual.findOne({ where: { cod_contrato: codigo_contrato_individual } });
+      const individualContractExist = await ContratoIndividual.findOne({ where: { cod_contrato: codigo_contrato_individual } });
 
-        if (individualContractExist) {
-          return res.status(400).json({
-            status: 'success',
-            msg: 'Ya existe un Contrato Individual para este pasajero'
-          });
-        }
+      // Verifica que no exita un contrato para este pasajero
+      if (individualContractExist) {
+        return res.status(400).json({
+          status: 'success',
+          msg: 'Ya existe un Contrato Individual para este pasajero. Es posible que exista como cancelado.'
+        });
+      }
 
-        const individualContract = await ContratoIndividual.create({
+      // Verifica si es o no un pasajero liberado
+      let individualContract;
+
+      if (cuotas.length > 7) {
+        individualContract = await ContratoIndividual.create({
+          id_contrato_general: id_contrato_general,
+          id_pasajero: id_pasajero,
+          cod_contrato: codigo_contrato_individual,
+          valor_contrato: 0,
+          pagos: 0,
+          recargos_pagos_segundo_vencimiento: 0,
+          estado: 'pagado'
+        });
+      } else {
+        individualContract = await ContratoIndividual.create({
           id_contrato_general: id_contrato_general,
           id_pasajero: id_pasajero,
           cod_contrato: codigo_contrato_individual,
@@ -386,29 +422,43 @@ module.exports = {
           estado: 'vigente'
         });
 
+        // Le agrega a las cuotas el id del Contrato Individual
         const cuotasConId = cuotas.map((el) => ({ ...el, id_contrato_individual: individualContract.id }));
 
         await Promise.all(cuotasConId.map(async (share) => Cuota.create({ ...share })));
+      }
 
-        const generalContract = await ContratoGeneral.findByPk(id_contrato_general);
-        const occupiedSeats = generalContract.asientos_ocupados + 1;
-        await ContratoGeneral.update({ asientos_ocupados: occupiedSeats }, { where: { id: id_contrato_general } });
+      // Actualiza en número de asientos ocupado en el Contrato General
+      await ContratoGeneral.update({ asientos_ocupados: literal('asientos_ocupados + 1') }, { where: { id: id_contrato_general } });
+      // ContratoGeneral.increment('seq', { by: 1, where: { id: id_contrato_general }});
 
-        res.status(200).json({
+      if (cuotas.length > 7) {
+        return res.status(200).json({
           status: 'success',
-          msg: 'Contrato individual creado con éxito. Redireccionando a pagos',
+          msg: 'Contrato individual creado con éxito. Redireccionando',
           data: {
             codigo: individualContract.cod_contrato,
             id: individualContract.id
           }
         });
-      } catch (error) {
+      }
+
+      res.status(200).json({
+        status: 'success',
+        msg: 'Contrato individual creado con éxito. Redireccionando a pagos',
+        data: {
+          codigo: individualContract.cod_contrato,
+          id: individualContract.id,
+          redirectToPay: 'true'
+        }
+      });
+      /*  } catch (error) {
         res.status(409).json({
           status: 'error',
           msg: 'Ha ocurrido un error al intentar crear el contrato individual',
           error
         });
-      }
+      } */
     } else {
       res.status(400).json({
         status: 'bad request',
@@ -422,6 +472,7 @@ module.exports = {
     const errors = validationResult(req);
     if (errors.isEmpty()) {
       try {
+        const { user } = req;
         const { estado } = req.body;
         const { id } = req.params;
         const { individualContract } = req;
@@ -435,7 +486,7 @@ module.exports = {
 
             return res.status(200).json({
               status: 'success',
-              msg: `Contrato individual editado con éxito. Se eliminaron todas las cuotas asociadas`
+              msg: `Se eliminaron todas las cuotas asociadas. CONSIDERE ELIMINAR EL CONTRATO`
             });
           }
 
@@ -449,12 +500,15 @@ module.exports = {
           const total_return = installments.reduce((acc, el) => acc + Number(el.valor_primer_vencimiento), 0) * -1;
 
           // Inserción del movimiento(egreso)
-          await Movimiento.create({
-            importe: total_return,
-            tipo: 'egreso',
-            forma_pago: 'egreso',
-            info: `Devolución de cuotas por eliminación de Contrato Individual ${individualContract.cod_contrato}`
-          });
+          if (Number(total_return) !== 0) {
+            await Movimiento.create({
+              importe: total_return,
+              tipo: 'egreso',
+              forma_pago: 'egreso',
+              info: `Devolución de cuotas por eliminación de Contrato Individual ${individualContract.cod_contrato}`,
+              id_usuario: user.id
+            });
+          }
 
           // Eliminicación de todas las cuotas
           await Cuota.destroy({ where: { id_contrato_individual: id } });
@@ -473,16 +527,16 @@ module.exports = {
             status: 'success',
             cuotas_devueltas: installments,
             total_cuotas_devultas: total_return,
-            msg: `Contrato individual editado con éxito. Se liberó un asiento del Contrato general. Se devolvieron $ ${
+            msg: `Se liberó un asiento del Contrato general. Se devolvieron $ ${
               total_return * -1
-            } en concepto de cuotas.  Se eliminaron todas las cuotas asociadas`
+            } en concepto de cuotas.  Se eliminaron todas las cuotas asociadas. CONSIDERE ELIMINAR EL CONTRATO`
           });
         }
 
         if (estado === 'pagado') {
           // Obtención de todas las cuotas asociadas al Contrato Individual que será borrado
           const installments = await Cuota.findAll({
-            where: { id_contrato_individual: id, numero: { [Op.not]: 0 }, estado: 'pendiente' },
+            where: { id_contrato_individual: id, /* numero: { [Op.not]: 0 }, */ estado: 'pendiente' },
             attributes: ['id', 'valor_primer_vencimiento']
           });
 
@@ -496,7 +550,8 @@ module.exports = {
               importe: total_charge,
               tipo: 'ingreso',
               forma_pago: 'efectivo',
-              info: `Pago de todas las cuotas pendientes del Contrato Individual ${individualContract.cod_contrato}`
+              info: `Pago de todas las cuotas pendientes del Contrato Individual ${individualContract.cod_contrato}`,
+              id_usuario: user.id
             });
 
             msg = `Contrato individual editado con éxito. Ingresaron $ ${total_charge} en concepto de cuotas`;

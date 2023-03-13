@@ -1,8 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
   const cuota = sequelize.define(
-    'Cuota', //alias
+    'Cuota',
     {
-      //table structure
       numero: {
         type: DataTypes.INTEGER(2),
         allowNull: false
@@ -24,12 +23,15 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       },
       estado: {
-        type: DataTypes.ENUM('pagada', 'pendiente'),
+        type: DataTypes.ENUM('pagada', 'pendiente', 'en-proceso'),
         allowNull: false
+      },
+      ticket: {
+        type: DataTypes.INTEGER(7),
+        allowNull: true
       }
     },
     {
-      //configs
       tablename: 'cuotas',
       Timestamps: true,
       createdAt: 'created_at',

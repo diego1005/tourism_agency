@@ -1,8 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
   const parametro = sequelize.define(
-    'Parametro', //alias
+    'Parametro',
     {
-      //table structure
       alerta_dias_contrato_general: {
         type: DataTypes.INTEGER(2),
         allowNull: false
@@ -26,10 +25,17 @@ module.exports = (sequelize, DataTypes) => {
       access_token_produccion: {
         type: DataTypes.STRING(80),
         allowNull: false
+      },
+      ticket: {
+        type: DataTypes.INTEGER(7),
+        allowNull: true
+      },
+      dias_diferencia_primer_segundo_pago: {
+        type: DataTypes.INTEGER(2),
+        allowNull: true
       }
     },
     {
-      //configs
       tablename: 'parametros',
       Timestamps: true,
       createdAt: 'created_at',
